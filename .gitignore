@@ -1,0 +1,7 @@
+.codex-tools/
+.supabase-tools/
+.supabase/
+*.log
+.DS_Store
+Thumbs.db
+
