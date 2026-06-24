@@ -1,0 +1,112 @@
+name: Add Newsletter Modal
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/newsletter-modal.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch portfolio newsletter modal
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('nadi-portfolio.html')
+          s = p.read_text()
+          css = '''
+    .newsletter-dialog {
+      width: min(560px, calc(100vw - 32px));
+      margin: auto;
+      padding: 0;
+      color: var(--paper);
+      border: 1px solid rgba(242, 239, 232, .24);
+      background: rgba(12, 13, 16, .96);
+      box-shadow: 0 40px 120px rgba(0, 0, 0, .72);
+      backdrop-filter: blur(28px);
+    }
+    .newsletter-dialog::backdrop { background: rgba(3, 4, 6, .72); backdrop-filter: blur(9px); }
+    .newsletter-shell { padding: clamp(28px, 6vw, 54px); }
+    .newsletter-head { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 28px; }
+    .newsletter-head h2 { font: 600 clamp(2.8rem, 8vw, 5rem)/.9 var(--display); text-transform: uppercase; }
+    .newsletter-close { width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 50%; color: var(--paper); background: transparent; cursor: pointer; font: 300 20px/1 var(--mono); }
+    .newsletter-close:hover { border-color: var(--orange); color: var(--orange); }
+    .newsletter-copy { margin-bottom: 24px; color: var(--muted); line-height: 1.7; }
+    .newsletter-form { display: grid; gap: 12px; }
+    .newsletter-form input { width: 100%; padding: 15px 16px; border: 1px solid var(--line); background: rgba(8, 9, 11, .55); color: var(--paper); font: 400 .92rem/1 var(--sans); }
+    .newsletter-form input:focus { outline: 2px solid var(--orange); outline-offset: 2px; }
+    .newsletter-status { min-height: 20px; color: var(--orange); font: 400 .78rem/1.4 var(--mono); letter-spacing: .05em; text-transform: uppercase; }
+'''
+          if '.newsletter-dialog' not in s:
+              s = s.replace('    .repo-link[hidden] { display: none; }\n', '    .repo-link[hidden] { display: none; }\n' + css + '\n')
+          s = s.replace('<a class="button" href="mailto:hello@example.com">Email</a>', '<a class="button" href="mailto:nadi@nadidoug.com">Email</a>')
+          s = s.replace('<a class="button" href="join.html">Join</a>', '<button class="button" id="newsletterOpen" type="button">Join</button>')
+          if '<button class="button" id="newsletterOpen" type="button">Join</button>' not in s:
+              s = s.replace('<a class="button" href="mailto:nadi@nadidoug.com">Email</a>\n          <a class="button" href="#" download>Resume</a>', '<a class="button" href="mailto:nadi@nadidoug.com">Email</a>\n          <button class="button" id="newsletterOpen" type="button">Join</button>\n          <a class="button" href="#" download>Resume</a>')
+          modal = '''
+  <dialog class="newsletter-dialog" id="newsletterDialog" aria-labelledby="newsletterTitle">
+    <div class="newsletter-shell">
+      <div class="newsletter-head">
+        <h2 id="newsletterTitle">Join Nadidoug</h2>
+        <button class="newsletter-close" id="newsletterClose" type="button" aria-label="Close newsletter">×</button>
+      </div>
+      <p class="newsletter-copy">Simple tech notes, project updates, useful tools, and tutorials. No daily spam.</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <input id="newsletterName" name="name" type="text" placeholder="Your name">
+        <input id="newsletterEmail" name="email" type="email" placeholder="Your email" required>
+        <button class="button" type="submit">Subscribe</button>
+        <p class="newsletter-status" id="newsletterStatus"></p>
+      </form>
+    </div>
+  </dialog>
+'''
+          if 'id="newsletterDialog"' not in s:
+              s = s.replace('  <dialog class="project-dialog" id="projectDialog" aria-labelledby="dialogTitle">', modal + '\n  <dialog class="project-dialog" id="projectDialog" aria-labelledby="dialogTitle">')
+          js = '''
+    const newsletterDialog = document.querySelector("#newsletterDialog");
+    const newsletterOpen = document.querySelector("#newsletterOpen");
+    const newsletterClose = document.querySelector("#newsletterClose");
+    const newsletterForm = document.querySelector("#newsletterForm");
+    const newsletterStatus = document.querySelector("#newsletterStatus");
+    const newsletterEndpoint = "https://yattojbkdupvahegedzv.supabase.co/functions/v1/portfolio-submit";
+    if (newsletterOpen && newsletterDialog) newsletterOpen.addEventListener("click", () => newsletterDialog.showModal());
+    if (newsletterClose && newsletterDialog) newsletterClose.addEventListener("click", () => newsletterDialog.close());
+    if (newsletterDialog) newsletterDialog.addEventListener("click", event => { if (event.target === newsletterDialog) newsletterDialog.close(); });
+    if (newsletterForm) newsletterForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      newsletterStatus.textContent = "Joining...";
+      try {
+        const response = await fetch(newsletterEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "newsletter",
+            name: document.querySelector("#newsletterName").value.trim(),
+            email: document.querySelector("#newsletterEmail").value.trim()
+          })
+        });
+        if (!response.ok) throw new Error("Signup failed");
+        newsletterForm.reset();
+        newsletterStatus.textContent = "You are on the list.";
+      } catch (error) {
+        newsletterStatus.textContent = "Could not sign up. Try again.";
+      }
+    });
+'''
+          if 'newsletterEndpoint' not in s:
+              s = s.replace('    const projectDialog = document.querySelector("#projectDialog");', js + '\n    const projectDialog = document.querySelector("#projectDialog");')
+          p.write_text(s)
+          PY
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add nadi-portfolio.html
+          git diff --cached --quiet || git commit -m "Add cinematic newsletter modal"
+          git push
