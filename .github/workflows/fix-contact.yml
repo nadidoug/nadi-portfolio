@@ -1,0 +1,37 @@
+name: Fix Contact Link
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/fix-contact.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch contact buttons
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('nadi-portfolio.html')
+          s = p.read_text()
+          old = '<a class="button" href="mailto:hello@example.com">Email</a>\n          <a class="button" href="#" download>Resume</a>'
+          new = '<a class="button" href="mailto:nadi@nadidoug.com">Email</a>\n          <a class="button" href="join.html">Join</a>\n          <a class="button" href="#" download>Resume</a>'
+          if old not in s:
+              s = s.replace('mailto:hello@example.com', 'mailto:nadi@nadidoug.com')
+          else:
+              s = s.replace(old, new)
+          p.write_text(s)
+          PY
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add nadi-portfolio.html
+          git diff --cached --quiet || git commit -m "Fix contact email and add join link"
+          git push
