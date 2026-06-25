@@ -211,10 +211,10 @@
     }
     #hero { height: 170vh; }
     #about { height: 150vh; }
-    #projects { height: 190vh; align-items: flex-start; padding-top: 12vh; }
-    #skills { height: 140vh; }
+    #projects { height: 150vh; align-items: flex-start; padding-top: 12vh; }
+    #skills { height: 120vh; }
     #automation { height: 190vh; align-items: flex-start; padding-top: 14vh; }
-    #contact { height: 170vh; }
+    #contact { min-height: 112vh; align-items: flex-start; padding-top: 24vh; padding-bottom: 4vh; }
 
     .inner { width: min(1080px, 100%); margin: 0 auto; }
     .eyebrow {
@@ -451,7 +451,7 @@
       text-transform: uppercase;
     }
 
-    #contact .inner { position: relative; top: 40vh; text-align: center; max-width: 1000px; }
+    #contact .inner { position: relative; top: 0; text-align: center; max-width: 1000px; }
     #contact > .inner > h2 {
       margin-bottom: 48px;
       font: 600 clamp(3.2rem, 9vw, 9rem)/.9 var(--display);
@@ -549,7 +549,7 @@
     footer {
       position: relative;
       z-index: 10;
-      padding: 26px clamp(24px, 4vw, 60px) 40px;
+      padding: 20px clamp(24px, 4vw, 60px) max(24px, calc(env(safe-area-inset-bottom) + 18px));
       display: flex;
       justify-content: space-between;
       gap: 20px;
@@ -562,7 +562,7 @@
     @media (max-width: 820px) {
       .cards { grid-template-columns: 1fr; }
       .card { min-height: 250px; }
-      #projects { height: 230vh; padding-top: 10vh; }
+      #projects { height: 190vh; padding-top: 10vh; }
       #automation { height: auto; min-height: 180vh; padding-top: 12vh; padding-bottom: 14vh; }
       .automation-grid { grid-template-columns: 1fr; gap: 36px; }
       .automation-copy h2 { font-size: clamp(3rem, 14vw, 6.4rem); }
@@ -572,7 +572,7 @@
       .progress-rail { display: none; }
       .topbar { padding: 18px 20px; }
       .chapter { display: none; }
-      #contact { height: 190vh; align-items: flex-start; padding-top: 18vh; padding-bottom: max(12vh, calc(env(safe-area-inset-bottom) + 80px)); }
+      #contact { min-height: 104svh; align-items: flex-start; padding-top: 10vh; padding-bottom: max(2vh, calc(env(safe-area-inset-bottom) + 18px)); }
       #contact .inner { top: 0; }
       #contact > .inner > h2 { margin-bottom: 28px; font-size: clamp(2.8rem, 15vw, 6.5rem); }
       .subscribe-panel.open { margin-top: 18px; padding: 18px 16px max(18px, calc(env(safe-area-inset-bottom) + 18px)); }
@@ -593,7 +593,7 @@
       .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .card { min-height: 280px; }
       .card:last-child { grid-column: 1 / -1; min-height: 240px; }
-      #projects { height: 185svh; }
+      #projects { height: 155svh; }
     }
 
     @media (max-width: 420px) {
@@ -870,9 +870,9 @@
       logoDock: [0.15, 0.30],
       intro: [0.25, 0.45],
       projects: [0.27, 0.36],
-      skills: [0.50, 0.58, 0.64, 0.72],
-      automation: [0.62, 0.70, 0.83, 0.92],
-      contact: [0.86, 1.00],
+      skills: [0.42, 0.445, 0.53, 0.61],
+      automation: [0.56, 0.63, 0.76, 0.85],
+      contact: [0.80, 0.94],
       footage: [0.00, 0.32]
     };
 
@@ -880,9 +880,9 @@
       { start: 0.00, label: "Hero / 01" },
       { start: 0.25, label: "About / 02" },
       { start: 0.31, label: "Projects / 03" },
-      { start: 0.58, label: "Skills / 04" },
-      { start: 0.70, label: "Automation / 05" },
-      { start: 0.88, label: "Contact / 06" }
+      { start: 0.445, label: "Skills / 04" },
+      { start: 0.63, label: "Automation / 05" },
+      { start: 0.82, label: "Contact / 06" }
     ];
 
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1195,8 +1195,12 @@
       emailToggle.setAttribute("aria-expanded", String(open));
       if (dismissed) sessionStorage.setItem("nadi-subscribe-dismissed", "true");
       if (open && window.matchMedia("(max-width: 820px)").matches) {
-        setTimeout(() => subscribePanel.scrollIntoView({ behavior: "smooth", block: "center" }), 120);
+        setTimeout(() => subscribePanel.scrollIntoView({ behavior: "smooth", block: "end" }), 120);
       }
+      requestAnimationFrame(() => {
+        state.maxScroll = Math.max(1, document.documentElement.scrollHeight - state.height);
+        updateScroll();
+      });
       if (open && focusField) setTimeout(() => subscriberEmail.focus(), 560);
     }
 
@@ -1219,7 +1223,7 @@
       renderFootage(state.smoothProgress);
       renderParticles(state.smoothProgress, time);
       renderDOM(state.smoothProgress);
-      if (state.smoothProgress >= .94 && !subscribeAutoShown && !sessionStorage.getItem("nadi-subscribe-dismissed")) {
+      if (state.smoothProgress >= .90 && !subscribeAutoShown && !sessionStorage.getItem("nadi-subscribe-dismissed")) {
         subscribeAutoShown = true;
         setSubscribePanel(true);
       }
