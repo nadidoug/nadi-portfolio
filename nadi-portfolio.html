@@ -118,12 +118,48 @@
     }
     #tagline {
       margin-top: clamp(26px, 5vh, 54px);
+      min-height: 52px;
+      display: grid;
+      grid-template-columns: minmax(110px, 1fr) auto minmax(110px, 1fr);
+      align-items: center;
+      column-gap: clamp(12px, 2.2vw, 34px);
       font: 400 clamp(.66rem, 1.2vw, .84rem)/1.7 var(--mono);
       letter-spacing: .2em;
       text-transform: uppercase;
       color: rgba(242, 239, 232, .78);
       will-change: opacity, transform;
     }
+    .tagline-word {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      will-change: opacity, transform;
+      white-space: nowrap;
+    }
+    .tagline-left { justify-self: end; transform: translateX(-46px); }
+    .tagline-center {
+      position: relative;
+      justify-self: center;
+      padding: 13px 18px;
+      transform: translateY(18px) scale(.78);
+      color: var(--paper);
+    }
+    .tagline-center::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: -1;
+      width: clamp(120px, 18vw, 260px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(242, 239, 232, .72), transparent);
+      transform: translate(-50%, -50%) scaleX(var(--line-scale, 0));
+      transform-origin: center;
+      opacity: .9;
+      transition: none;
+    }
+    .tagline-right { justify-self: start; transform: translateX(46px); }
     .scroll-cue {
       position: fixed;
       z-index: 30;
@@ -230,9 +266,9 @@
       text-align: left;
       font: inherit;
       cursor: pointer;
-      border: 1px solid rgba(242, 239, 232, .24);
-      background: linear-gradient(145deg, rgba(20, 22, 26, .88), rgba(8, 9, 11, .80));
-      box-shadow: 0 22px 70px rgba(0, 0, 0, .22);
+      border: 1px solid rgba(242, 239, 232, .36);
+      background: linear-gradient(145deg, rgba(20, 22, 26, .96), rgba(8, 9, 11, .90));
+      box-shadow: 0 22px 70px rgba(0, 0, 0, .36);
       backdrop-filter: blur(18px) saturate(.8);
       opacity: 0;
       transform: translateY(80px);
@@ -247,7 +283,7 @@
     .card:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
     .card-index { color: var(--blue); font: 500 10px/1 var(--mono); letter-spacing: .15em; }
     .card h3 { margin-bottom: 14px; font: 600 2rem/1 var(--display); text-transform: uppercase; }
-    .card p { color: var(--muted); font-size: .89rem; line-height: 1.65; }
+    .card p { color: rgba(242, 239, 232, .76); font-size: .89rem; line-height: 1.65; }
     .card-arrow { margin-top: 25px; color: var(--paper); font: 300 1.2rem/1 var(--mono); }
 
     .project-dialog {
@@ -344,8 +380,8 @@
       transition: max-height .65s cubic-bezier(.22, 1, .36, 1), margin .45s ease, padding .45s ease, transform .55s cubic-bezier(.22, 1, .36, 1), opacity .35s ease, visibility .55s;
     }
     .subscribe-panel.open {
-      max-height: min(43vh, 320px);
-      margin-top: 22px;
+      max-height: none;
+      margin-top: clamp(18px, 3vh, 28px);
       padding-top: clamp(18px, 2.4vw, 28px);
       padding-bottom: max(clamp(18px, 2.4vw, 28px), calc(env(safe-area-inset-bottom) + 14px));
       opacity: 1;
@@ -357,12 +393,12 @@
       margin: 0 auto;
       display: grid;
       grid-template-columns: minmax(240px, .8fr) minmax(420px, 1.2fr);
-      gap: clamp(28px, 6vw, 90px);
-      align-items: end;
+      gap: clamp(24px, 4vw, 64px);
+      align-items: center;
     }
     .subscribe-kicker { margin-bottom: 12px; color: var(--orange); font: 500 10px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; }
-    .subscribe-copy h2 { font: 600 clamp(2rem, 4vw, 3.7rem)/.92 var(--display); text-transform: uppercase; }
-    .subscribe-copy p { margin-top: 12px; max-width: 460px; color: var(--muted); font-size: .86rem; line-height: 1.55; }
+    .subscribe-copy h2 { font: 600 clamp(1.9rem, 3.4vw, 3.2rem)/.92 var(--display); text-transform: uppercase; }
+    .subscribe-copy p { margin-top: 10px; max-width: 460px; color: var(--muted); font-size: .84rem; line-height: 1.5; }
     .subscribe-close {
       position: absolute;
       top: 18px;
@@ -389,9 +425,9 @@
     }
     .subscribe-fields input:focus { border-color: var(--orange); }
     .subscribe-submit { min-width: 140px; cursor: pointer; }
-    .subscribe-consent { display: flex; align-items: flex-start; gap: 9px; margin-top: 12px; color: var(--muted); font: 400 9px/1.5 var(--mono); transform: translateY(-40px); }
+    .subscribe-consent { display: flex; align-items: flex-start; gap: 9px; margin-top: 12px; color: var(--muted); font: 400 9px/1.5 var(--mono); }
     .subscribe-consent input { margin-top: 2px; accent-color: var(--orange); }
-    .subscribe-status { min-height: 18px; margin-top: 10px; color: var(--paper); font: 400 10px/1.5 var(--mono); transform: translateY(-40px); }
+    .subscribe-status { min-height: 18px; margin-top: 8px; color: var(--paper); font: 400 10px/1.5 var(--mono); }
     .legacy-subscribe-panel { display: none; }
 
     footer {
@@ -415,11 +451,20 @@
       .progress-rail { display: none; }
       .topbar { padding: 18px 20px; }
       .chapter { display: none; }
-      #contact .inner { top: 34vh; }
-      .subscribe-grid { grid-template-columns: 1fr; gap: 24px; }
+      #contact { height: 190vh; align-items: flex-start; padding-top: 18vh; padding-bottom: max(12vh, calc(env(safe-area-inset-bottom) + 80px)); }
+      #contact .inner { top: 0; }
+      #contact > .inner > h2 { margin-bottom: 28px; font-size: clamp(2.8rem, 15vw, 6.5rem); }
+      .subscribe-panel.open { margin-top: 18px; padding: 18px 16px max(18px, calc(env(safe-area-inset-bottom) + 18px)); }
+      .subscribe-grid { grid-template-columns: 1fr; gap: 12px; align-items: start; }
       .subscribe-fields { grid-template-columns: 1fr; }
+      .subscribe-fields input { padding: 12px 13px; font-size: .76rem; }
+      .subscribe-submit { min-height: 40px; padding: 12px 16px; }
       .subscribe-copy { padding-right: 38px; }
-      .actions .button { flex: 1 1 130px; }
+      .subscribe-copy h2 { font-size: clamp(1.7rem, 8vw, 2.5rem); }
+      .subscribe-copy p { display: none; }
+      .subscribe-consent { margin-top: 8px; font-size: 8px; line-height: 1.45; }
+      .actions { gap: 8px; }
+      .actions .button { flex: 1 1 0; min-width: 0; padding: 14px 10px; }
       footer { flex-direction: column; }
     }
 
@@ -433,16 +478,25 @@
     @media (max-width: 420px) {
       section { padding-left: 20px; padding-right: 20px; }
       #logo { font-size: clamp(6rem, 31vw, 8rem); }
-      #tagline { padding: 0 18px; letter-spacing: .14em; }
+      #tagline {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 0 18px;
+        letter-spacing: .14em;
+      }
+      .tagline-left,
+      .tagline-center,
+      .tagline-right { justify-self: center; }
       .topbar { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
       .card { padding: 23px; }
       .dialog-body { padding: 30px 22px 42px; }
-      .subscribe-copy h2 { font-size: clamp(2.25rem, 12vw, 3.25rem); }
+      .subscribe-copy h2 { font-size: clamp(1.9rem, 10vw, 2.7rem); }
+      .subscribe-close { top: 12px; right: 12px; width: 34px; height: 34px; }
     }
 
     @media (orientation: landscape) and (max-height: 540px) {
       .scroll-cue { display: none; }
-      #tagline { margin-top: 18px; }
+      #tagline { margin-top: 18px; min-height: 36px; }
       .subscribe-panel.open { max-height: 72vh; padding-top: 14px; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
       .subscribe-grid { grid-template-columns: minmax(210px, .8fr) minmax(420px, 1.2fr); gap: 28px; }
       .subscribe-copy { padding-right: 0; }
@@ -472,7 +526,11 @@
 
   <div id="logoLayer" aria-hidden="true">
     <h1 id="logo">Nadi</h1>
-    <p id="tagline">Developer. Creative Technologist. Systems Builder.</p>
+    <p id="tagline">
+      <span class="tagline-word tagline-left" id="tagDeveloper">Developer</span>
+      <span class="tagline-word tagline-center" id="tagCreative">Creative Technologist</span>
+      <span class="tagline-word tagline-right" id="tagSystems">Systems Builder</span>
+    </p>
   </div>
 
   <div class="scroll-cue" id="scrollCue" aria-hidden="true">Scroll to direct</div>
@@ -622,7 +680,7 @@
       logoHold: [0.00, 0.15],
       logoDock: [0.15, 0.30],
       intro: [0.25, 0.45],
-      projects: [0.38, 0.52],
+      projects: [0.27, 0.36],
       skills: [0.60, 0.80],
       contact: [0.80, 1.00],
       footage: [0.00, 0.32]
@@ -631,7 +689,7 @@
     const CHAPTERS = [
       { start: 0.00, label: "Hero / 01" },
       { start: 0.25, label: "About / 02" },
-      { start: 0.40, label: "Projects / 03" },
+      { start: 0.31, label: "Projects / 03" },
       { start: 0.62, label: "Skills / 04" },
       { start: 0.82, label: "Contact / 05" }
     ];
@@ -645,6 +703,9 @@
     const elements = {
       logoLayer: document.querySelector("#logoLayer"),
       tagline: document.querySelector("#tagline"),
+      tagDeveloper: document.querySelector("#tagDeveloper"),
+      tagCreative: document.querySelector("#tagCreative"),
+      tagSystems: document.querySelector("#tagSystems"),
       intro: document.querySelector("#introText"),
       cards: [...document.querySelectorAll(".card")],
       skills: document.querySelector("#skills .inner"),
@@ -802,14 +863,29 @@
       elements.tagline.style.opacity = 1 - dock;
       elements.tagline.style.transform = `translateY(${-dock * 16}px)`;
 
+      const developerIn = mapRange(progress, .030, .046, 0, 1);
+      const systemsIn = mapRange(progress, .050, .066, 0, 1);
+      const creativeIn = mapRange(progress, .080, .098, 0, 1);
+      const developerEase = 1 - Math.pow(1 - developerIn, 3);
+      const systemsEase = 1 - Math.pow(1 - systemsIn, 3);
+      const creativePop = 1 - Math.pow(1 - creativeIn, 4);
+      elements.tagDeveloper.style.opacity = developerEase * (1 - dock);
+      elements.tagDeveloper.style.transform = `translateX(${lerp(-58, 0, developerEase)}px)`;
+      elements.tagSystems.style.opacity = systemsEase * (1 - dock);
+      elements.tagSystems.style.transform = `translateX(${lerp(58, 0, systemsEase)}px)`;
+      elements.tagCreative.style.opacity = creativePop * (1 - dock);
+      elements.tagCreative.style.transform = `translateY(${lerp(18, 0, creativePop)}px) scale(${lerp(.78, 1, creativePop)})`;
+      elements.tagCreative.style.setProperty("--line-scale", creativePop);
+
       const intro = mapRange(progress, ...TIMELINE.intro, 0, 1);
       elements.intro.style.opacity = intro;
       elements.intro.style.transform = `translateY(${lerp(70, 0, intro)}px)`;
 
       elements.cards.forEach((card, index) => {
-        const cardIn = mapRange(progress, TIMELINE.projects[0] + index * .015, TIMELINE.projects[1], 0, 1);
-        card.style.opacity = cardIn;
-        card.style.transform = `translateY(${lerp(80, 0, cardIn)}px)`;
+        const cardIn = mapRange(progress, TIMELINE.projects[0] + index * .004, TIMELINE.projects[1], 0, 1);
+        const cardEase = 1 - Math.pow(1 - cardIn, 2.2);
+        card.style.opacity = Math.max(.35, cardEase);
+        card.style.transform = `translateY(${lerp(24, 0, cardEase)}px)`;
       });
 
       const skills = mapRange(progress, ...TIMELINE.skills, 0, 1);
@@ -892,6 +968,9 @@
       subscribePanel.setAttribute("aria-hidden", String(!open));
       emailToggle.setAttribute("aria-expanded", String(open));
       if (dismissed) sessionStorage.setItem("nadi-subscribe-dismissed", "true");
+      if (open && window.matchMedia("(max-width: 820px)").matches) {
+        setTimeout(() => subscribePanel.scrollIntoView({ behavior: "smooth", block: "center" }), 120);
+      }
       if (open && focusField) setTimeout(() => subscriberEmail.focus(), 560);
     }
 
