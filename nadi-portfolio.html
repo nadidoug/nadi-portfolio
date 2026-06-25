@@ -597,23 +597,43 @@
       #projects { height: 155svh; }
     }
 
+    @media (max-width: 560px) {
+      #tagline {
+        width: min(100%, 92vw);
+        margin-left: auto;
+        margin-right: auto;
+        grid-template-columns: 1fr;
+        gap: 6px;
+        min-height: 112px;
+        padding: 0 14px;
+        box-sizing: border-box;
+        font-size: clamp(.52rem, 2.25vw, .66rem);
+        line-height: 1.42;
+        letter-spacing: .105em;
+      }
+      .tagline-word {
+        width: 100%;
+        max-width: 86vw;
+        white-space: normal;
+        text-align: center;
+      }
+      .tagline-left,
+      .tagline-center,
+      .tagline-right { justify-self: center; }
+      .tagline-center { padding: 7px 8px; }
+      .tagline-center::before { width: min(76vw, 250px); }
+    }
+
     @media (max-width: 420px) {
       section { padding-left: 20px; padding-right: 20px; }
       #logo { font-size: clamp(6rem, 31vw, 8rem); }
       #tagline {
-        grid-template-columns: 1fr;
-        gap: 4px;
-        min-height: 104px;
-        padding: 0 20px;
-        font-size: clamp(.54rem, 2.45vw, .66rem);
-        line-height: 1.45;
-        letter-spacing: .12em;
+        min-height: 116px;
+        padding: 0 10px;
+        font-size: clamp(.5rem, 2.35vw, .62rem);
+        letter-spacing: .095em;
       }
-      .tagline-word { max-width: 88vw; white-space: normal; text-align: center; }
-      .tagline-left,
-      .tagline-center,
-      .tagline-right { justify-self: center; }
-      .tagline-center { padding: 8px 10px; }
+      .tagline-word { max-width: 84vw; }
       .tagline-center::before { width: min(72vw, 230px); }
       .topbar { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
       .card { padding: 23px; }
@@ -1065,8 +1085,8 @@
       const developerEase = 1 - Math.pow(1 - developerIn, 3);
       const systemsEase = 1 - Math.pow(1 - systemsIn, 3);
       const creativePop = 1 - Math.pow(1 - creativeIn, 4);
-      const taglineSlide = state.width < 520 ? 22 : 58;
-      const creativeStartScale = state.width < 520 ? .88 : .78;
+      const taglineSlide = state.width < 560 ? 16 : 58;
+      const creativeStartScale = state.width < 560 ? .9 : .78;
       elements.tagDeveloper.style.opacity = developerEase * (1 - dock);
       elements.tagDeveloper.style.transform = `translateX(${lerp(-taglineSlide, 0, developerEase)}px)`;
       elements.tagSystems.style.opacity = systemsEase * (1 - dock);
