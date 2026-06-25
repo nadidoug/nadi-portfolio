@@ -3,11 +3,926 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=nadi-portfolio.html">
-  <title>Nadi Portfolio</title>
+  <meta name="theme-color" content="#08090b">
+  <meta name="description" content="Nadi — developer, creative technologist, and systems builder.">
+  <title>Nadi — Creative Technologist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #08090b;
+      --paper: #f2efe8;
+      --muted: #a8a49b;
+      --line: rgba(242, 239, 232, .16);
+      --orange: #ff6b2b;
+      --blue: #587cff;
+      --display: "Oswald", "Arial Narrow", sans-serif;
+      --sans: "Manrope", Arial, sans-serif;
+      --mono: "DM Mono", monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--ink); scroll-behavior: auto; -webkit-text-size-adjust: 100%; }
+    body {
+      min-width: 320px;
+      overflow-x: hidden;
+      color: var(--paper);
+      background: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* The footage canvas and particle canvas are fixed behind all DOM content. */
+    #heroCanvas,
+    #fxCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    #heroCanvas { z-index: 0; background: #111; }
+    #fxCanvas { z-index: 1; }
+
+    .grade {
+      position: fixed;
+      z-index: 2;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(8, 9, 11, .22), rgba(8, 9, 11, .08) 45%, rgba(8, 9, 11, .92)),
+        radial-gradient(circle at 50% 42%, transparent 20%, rgba(8, 9, 11, .58) 100%);
+    }
+    .grain {
+      position: fixed;
+      z-index: 3;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      pointer-events: none;
+      opacity: .045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+      animation: grain .18s steps(2) infinite;
+    }
+    @keyframes grain {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(2%, -1%); }
+      50% { transform: translate(-1%, 2%); }
+      75% { transform: translate(1%, 1%); }
+      100% { transform: translate(-2%, -1%); }
+    }
+
+    .topbar {
+      position: fixed;
+      z-index: 50;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: max(22px, env(safe-area-inset-top)) max(clamp(20px, 3vw, 48px), env(safe-area-inset-right)) 22px max(clamp(20px, 3vw, 48px), env(safe-area-inset-left));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font: 400 10px/1 var(--mono);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    .timecode { display: flex; align-items: center; gap: 10px; }
+    .record-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 13px var(--orange);
+    }
+    .chapter { color: var(--muted); }
+
+    #logoLayer {
+      position: fixed;
+      z-index: 30;
+      top: 44vh;
+      left: 50%;
+      width: min(94vw, 1500px);
+      text-align: center;
+      pointer-events: none;
+      will-change: transform;
+      transform: translate(-50%, -50%);
+    }
+    #logo {
+      font: 700 clamp(6.5rem, 25vw, 22rem)/.76 var(--display);
+      letter-spacing: .01em;
+      text-transform: uppercase;
+      text-shadow: 0 5px 45px rgba(0, 0, 0, .4);
+    }
+    #tagline {
+      margin-top: clamp(26px, 5vh, 54px);
+      font: 400 clamp(.66rem, 1.2vw, .84rem)/1.7 var(--mono);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba(242, 239, 232, .78);
+      will-change: opacity, transform;
+    }
+    .scroll-cue {
+      position: fixed;
+      z-index: 30;
+      bottom: max(28px, calc(env(safe-area-inset-bottom) + 12px));
+      left: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transform: translateX(-50%);
+      font: 400 9px/1 var(--mono);
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(242, 239, 232, .65);
+      pointer-events: none;
+    }
+    .scroll-cue::after {
+      content: "";
+      width: 1px;
+      height: 28px;
+      background: linear-gradient(var(--paper), transparent);
+    }
+
+    .progress-rail {
+      position: fixed;
+      z-index: 40;
+      right: clamp(18px, 2.6vw, 42px);
+      top: 50%;
+      width: 1px;
+      height: min(34vh, 280px);
+      transform: translateY(-50%);
+      background: rgba(242, 239, 232, .2);
+    }
+    #progressFill {
+      width: 1px;
+      height: 0;
+      background: linear-gradient(var(--orange), var(--blue));
+      box-shadow: 0 0 10px rgba(255, 107, 43, .4);
+    }
+
+    main { position: relative; z-index: 10; }
+    section {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh;
+      padding: 10vh clamp(24px, 8vw, 140px);
+      display: flex;
+      align-items: center;
+    }
+    #hero { height: 170vh; }
+    #about { height: 150vh; }
+    #projects { height: 190vh; align-items: flex-start; padding-top: 12vh; }
+    #skills { height: 140vh; }
+    #contact { height: 170vh; }
+
+    .inner { width: min(1080px, 100%); margin: 0 auto; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      color: var(--orange);
+      font: 500 10px/1 var(--mono);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+
+    #about .inner { max-width: 960px; }
+    .statement {
+      max-width: 920px;
+      font: 500 clamp(2.1rem, 5.6vw, 5.7rem)/1.05 var(--display);
+      letter-spacing: -.015em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(70px);
+      will-change: opacity, transform;
+    }
+    .statement em { color: var(--orange); font-style: normal; }
+
+    .section-heading {
+      margin-bottom: 52px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .section-heading h2 {
+      font: 600 clamp(3rem, 7vw, 7rem)/.9 var(--display);
+      text-transform: uppercase;
+      letter-spacing: -.02em;
+    }
+    .section-number { color: var(--muted); font: 400 10px/1 var(--mono); letter-spacing: .15em; }
+
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card {
+      min-height: 340px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100%;
+      color: var(--paper);
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+      border: 1px solid rgba(242, 239, 232, .24);
+      background: linear-gradient(145deg, rgba(20, 22, 26, .88), rgba(8, 9, 11, .80));
+      box-shadow: 0 22px 70px rgba(0, 0, 0, .22);
+      backdrop-filter: blur(18px) saturate(.8);
+      opacity: 0;
+      transform: translateY(80px);
+      will-change: opacity, transform;
+      transition: border-color .25s ease, background .25s ease;
+    }
+    .card:hover,
+    .card:focus-visible {
+      border-color: rgba(255, 107, 43, .9);
+      background: linear-gradient(145deg, rgba(28, 29, 33, .94), rgba(10, 11, 13, .88));
+    }
+    .card:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+    .card-index { color: var(--blue); font: 500 10px/1 var(--mono); letter-spacing: .15em; }
+    .card h3 { margin-bottom: 14px; font: 600 2rem/1 var(--display); text-transform: uppercase; }
+    .card p { color: var(--muted); font-size: .89rem; line-height: 1.65; }
+    .card-arrow { margin-top: 25px; color: var(--paper); font: 300 1.2rem/1 var(--mono); }
+
+    .project-dialog {
+      width: min(920px, calc(100vw - 32px)); max-height: min(84vh, 820px); margin: auto; padding: 0;
+      overflow: hidden; color: var(--paper); border: 1px solid rgba(242, 239, 232, .24);
+      background: rgba(12, 13, 16, .96); box-shadow: 0 40px 120px rgba(0, 0, 0, .72);
+      backdrop-filter: blur(28px);
+    }
+    .project-dialog::backdrop { background: rgba(3, 4, 6, .72); backdrop-filter: blur(9px); }
+    .dialog-shell { max-height: min(84vh, 820px); overflow-y: auto; }
+    .dialog-head {
+      position: sticky; top: 0; z-index: 2; padding: 22px clamp(22px, 4vw, 42px);
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      border-bottom: 1px solid var(--line); background: rgba(12, 13, 16, .94); backdrop-filter: blur(18px);
+    }
+    .dialog-reel { color: var(--blue); font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    .dialog-close {
+      width: 38px; height: 38px; color: var(--paper); border: 1px solid var(--line); border-radius: 50%;
+      background: transparent; cursor: pointer; font: 300 20px/1 var(--mono);
+    }
+    .dialog-close:hover { border-color: var(--orange); color: var(--orange); }
+    .dialog-body { padding: clamp(30px, 6vw, 72px); }
+    .dialog-body h2 { max-width: 760px; font: 600 clamp(3rem, 8vw, 6.8rem)/.88 var(--display); text-transform: uppercase; }
+    .dialog-summary { max-width: 700px; margin: 28px 0 22px; color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    .dialog-stack { margin-bottom: 36px; color: var(--orange); font: 400 10px/1.6 var(--mono); letter-spacing: .11em; text-transform: uppercase; }
+    .readme { padding-top: 32px; border-top: 1px solid var(--line); color: #d5d1c9; line-height: 1.7; }
+    .readme-label { display: block; margin-bottom: 20px; color: var(--muted); font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    .readme h1, .readme h2, .readme h3 { margin: 28px 0 12px; color: var(--paper); font-family: var(--display); text-transform: uppercase; }
+    .readme p { margin: 0 0 16px; }
+    .readme pre { overflow-x: auto; white-space: pre-wrap; font: 400 .8rem/1.7 var(--mono); }
+    .repo-link { display: inline-flex; margin-top: 32px; }
+    .repo-link[hidden] { display: none; }
+
+    #skills .inner,
+    #contact .inner {
+      opacity: 0;
+      transform: translateY(60px);
+      will-change: opacity, transform;
+    }
+    .skills-wrap { max-width: 960px; }
+    .skill-list { display: flex; flex-wrap: wrap; gap: 10px; }
+    .skill {
+      padding: 13px 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(8, 9, 11, .5);
+      color: rgba(242, 239, 232, .8);
+      font: 400 clamp(.7rem, 1vw, .8rem)/1 var(--mono);
+      letter-spacing: .04em;
+    }
+
+    #contact .inner { position: relative; top: 40vh; text-align: center; max-width: 1000px; }
+    #contact > .inner > h2 {
+      margin-bottom: 48px;
+      font: 600 clamp(3.2rem, 9vw, 9rem)/.9 var(--display);
+      letter-spacing: -.02em;
+      text-transform: uppercase;
+    }
+    .actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .button {
+      min-width: 150px;
+      min-height: 44px;
+      padding: 15px 24px;
+      border: 1px solid var(--line);
+      color: var(--paper);
+      background: rgba(8, 9, 11, .55);
+      text-decoration: none;
+      font: 500 10px/1 var(--mono);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      transition: color .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .button:hover,
+    .button:focus-visible { color: var(--ink); background: var(--paper); border-color: var(--paper); }
+    .button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+    .email-trigger { cursor: pointer; }
+
+    .subscribe-panel {
+      position: relative;
+      width: 100%;
+      max-height: 0;
+      margin: 0 auto;
+      overflow: hidden;
+      overscroll-behavior: contain;
+      padding: 0 clamp(18px, 3vw, 34px);
+      border-top: 1px solid rgba(242, 239, 232, .25);
+      border-bottom: 1px solid rgba(242, 239, 232, .12);
+      background: rgba(10, 11, 13, .96);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .42);
+      backdrop-filter: blur(24px);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(22px);
+      transition: max-height .65s cubic-bezier(.22, 1, .36, 1), margin .45s ease, padding .45s ease, transform .55s cubic-bezier(.22, 1, .36, 1), opacity .35s ease, visibility .55s;
+    }
+    .subscribe-panel.open {
+      max-height: min(43vh, 320px);
+      margin-top: 22px;
+      padding-top: clamp(18px, 2.4vw, 28px);
+      padding-bottom: max(clamp(18px, 2.4vw, 28px), calc(env(safe-area-inset-bottom) + 14px));
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .subscribe-grid {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(240px, .8fr) minmax(420px, 1.2fr);
+      gap: clamp(28px, 6vw, 90px);
+      align-items: end;
+    }
+    .subscribe-kicker { margin-bottom: 12px; color: var(--orange); font: 500 10px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; }
+    .subscribe-copy h2 { font: 600 clamp(2rem, 4vw, 3.7rem)/.92 var(--display); text-transform: uppercase; }
+    .subscribe-copy p { margin-top: 12px; max-width: 460px; color: var(--muted); font-size: .86rem; line-height: 1.55; }
+    .subscribe-close {
+      position: absolute;
+      top: 18px;
+      right: max(20px, env(safe-area-inset-right));
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--paper);
+      background: transparent;
+      cursor: pointer;
+      font: 300 20px/1 var(--mono);
+    }
+    .subscribe-fields { display: grid; grid-template-columns: .75fr 1.25fr auto; gap: 10px; }
+    .subscribe-fields input {
+      min-width: 0;
+      padding: 15px 16px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      outline: 0;
+      color: var(--paper);
+      background: rgba(255, 255, 255, .04);
+      font: 400 .82rem/1 var(--mono);
+    }
+    .subscribe-fields input:focus { border-color: var(--orange); }
+    .subscribe-submit { min-width: 140px; cursor: pointer; }
+    .subscribe-consent { display: flex; align-items: flex-start; gap: 9px; margin-top: 12px; color: var(--muted); font: 400 9px/1.5 var(--mono); transform: translateY(-40px); }
+    .subscribe-consent input { margin-top: 2px; accent-color: var(--orange); }
+    .subscribe-status { min-height: 18px; margin-top: 10px; color: var(--paper); font: 400 10px/1.5 var(--mono); transform: translateY(-40px); }
+    .legacy-subscribe-panel { display: none; }
+
+    footer {
+      position: relative;
+      z-index: 10;
+      padding: 26px clamp(24px, 4vw, 60px) 40px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font: 400 9px/1.5 var(--mono);
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 820px) {
+      .cards { grid-template-columns: 1fr; }
+      .card { min-height: 250px; }
+      #projects { height: 230vh; padding-top: 10vh; }
+      .section-heading { margin-bottom: 30px; }
+      .progress-rail { display: none; }
+      .topbar { padding: 18px 20px; }
+      .chapter { display: none; }
+      #contact .inner { top: 34vh; }
+      .subscribe-grid { grid-template-columns: 1fr; gap: 24px; }
+      .subscribe-fields { grid-template-columns: 1fr; }
+      .subscribe-copy { padding-right: 38px; }
+      .actions .button { flex: 1 1 130px; }
+      footer { flex-direction: column; }
+    }
+
+    @media (min-width: 600px) and (max-width: 900px) {
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .card { min-height: 280px; }
+      .card:last-child { grid-column: 1 / -1; min-height: 240px; }
+      #projects { height: 185svh; }
+    }
+
+    @media (max-width: 420px) {
+      section { padding-left: 20px; padding-right: 20px; }
+      #logo { font-size: clamp(6rem, 31vw, 8rem); }
+      #tagline { padding: 0 18px; letter-spacing: .14em; }
+      .topbar { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+      .card { padding: 23px; }
+      .dialog-body { padding: 30px 22px 42px; }
+      .subscribe-copy h2 { font-size: clamp(2.25rem, 12vw, 3.25rem); }
+    }
+
+    @media (orientation: landscape) and (max-height: 540px) {
+      .scroll-cue { display: none; }
+      #tagline { margin-top: 18px; }
+      .subscribe-panel.open { max-height: 72vh; padding-top: 14px; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+      .subscribe-grid { grid-template-columns: minmax(210px, .8fr) minmax(420px, 1.2fr); gap: 28px; }
+      .subscribe-copy { padding-right: 0; }
+      .subscribe-copy h2 { font-size: 2.2rem; }
+      .subscribe-copy p { margin-top: 8px; }
+      .subscribe-fields { grid-template-columns: .75fr 1.25fr auto; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .grain { animation: none; }
+      .scroll-cue { display: none; }
+      .statement, .card, #skills .inner, #contact .inner { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
 </head>
+
 <body>
-  <p><a href="nadi-portfolio.html">Open the Nadi portfolio</a></p>
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+  <canvas id="fxCanvas" aria-hidden="true"></canvas>
+  <div class="grade" id="grade" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="topbar" aria-label="Reel status">
+    <div class="timecode"><span class="record-dot"></span><span id="timecode">00:00:00</span></div>
+    <span class="chapter" id="chapter">Hero / 01</span>
+  </header>
+
+  <div id="logoLayer" aria-hidden="true">
+    <h1 id="logo">Nadi</h1>
+    <p id="tagline">Developer. Creative Technologist. Systems Builder.</p>
+  </div>
+
+  <div class="scroll-cue" id="scrollCue" aria-hidden="true">Scroll to direct</div>
+  <div class="progress-rail" aria-hidden="true"><div id="progressFill"></div></div>
+
+  <main>
+    <section id="hero" aria-label="Nadi — Developer, Creative Technologist, Systems Builder"></section>
+
+    <section id="about">
+      <div class="inner">
+        <span class="eyebrow">About the work</span>
+        <p class="statement" id="introText">I build digital systems that combine <em>software</em>, media, automation, and storytelling.</p>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="inner">
+        <div class="section-heading">
+          <h2>Selected work</h2>
+          <span class="section-number">Chapter / 03</span>
+        </div>
+        <div class="cards">
+          <button class="card" type="button" data-project="guapclock" aria-haspopup="dialog">
+            <span class="card-index">Reel 001</span>
+            <div><h3>GuapClock</h3><p>A desktop booth-time clock that tracks studio sessions, creates artist folders, and generates invoice records.</p><span class="card-arrow">↗</span></div>
+          </button>
+          <button class="card" type="button" data-project="vps-generator" aria-haspopup="dialog">
+            <span class="card-index">Reel 002</span>
+            <div><h3>VPS Generator SaaS</h3><p>A full-stack tool that turns infrastructure choices into ready-to-run VPS deployment scripts.</p><span class="card-arrow">↗</span></div>
+          </button>
+          <button class="card" type="button" data-project="retropong" aria-haspopup="dialog">
+            <span class="card-index">Reel 003</span>
+            <div><h3>RetroPong</h3><p>A responsive neon survival game with touch controls, chaos waves, scoring, and a live playable build.</p><span class="card-arrow">↗</span></div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="inner skills-wrap">
+        <span class="eyebrow">Tools of the trade</span>
+        <div class="skill-list" aria-label="Skills">
+          <span class="skill">JavaScript</span><span class="skill">React</span><span class="skill">Node</span>
+          <span class="skill">Python</span><span class="skill">APIs</span><span class="skill">GitHub</span>
+          <span class="skill">Automation</span><span class="skill">Video</span><span class="skill">Social Media Systems</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="inner">
+        <span class="eyebrow">End frame</span>
+        <h2>Let’s build something useful.</h2>
+        <div class="actions">
+          <button class="button email-trigger" id="emailToggle" type="button" aria-expanded="false" aria-controls="subscribePanel">Email</button>
+          <a class="button" href="#" download>Resume</a>
+          <a class="button" href="https://github.com/nadidoug" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+        <aside class="subscribe-panel" id="subscribePanel" aria-hidden="true" aria-labelledby="subscribeTitle">
+          <button class="subscribe-close" id="subscribeClose" type="button" aria-label="Close email signup">Ã—</button>
+          <div class="subscribe-grid">
+            <div class="subscribe-copy">
+              <p class="subscribe-kicker">Stay in the loop</p>
+              <h2 id="subscribeTitle">Join the next build.</h2>
+              <p>Occasional notes on software, creative systems, experiments, and what Iâ€™m shipping next.</p>
+            </div>
+            <form id="subscribeForm">
+              <div class="subscribe-fields">
+                <input id="subscriberName" name="name" type="text" autocomplete="name" placeholder="Your name" aria-label="Your name">
+                <input id="subscriberEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" required>
+                <button class="button subscribe-submit" type="submit">Subscribe</button>
+              </div>
+              <label class="subscribe-consent"><input name="consent" type="checkbox" required> I agree to receive occasional email updates and can unsubscribe at any time.</label>
+              <p class="subscribe-status" id="subscribeStatus" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="project-dialog" id="projectDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-shell">
+      <header class="dialog-head">
+        <span class="dialog-reel" id="dialogReel">Reel 001</span>
+        <button class="dialog-close" id="dialogClose" type="button" aria-label="Close project">×</button>
+      </header>
+      <div class="dialog-body">
+        <h2 id="dialogTitle">Project title</h2>
+        <p class="dialog-summary" id="dialogSummary"></p>
+        <p class="dialog-stack" id="dialogStack"></p>
+        <div class="readme" id="dialogReadme" aria-live="polite"></div>
+        <a class="button repo-link" id="dialogRepo" href="https://github.com/" target="_blank" rel="noopener noreferrer" hidden>View repository ↗</a>
+      </div>
+    </div>
+  </dialog>
+
+  <aside class="subscribe-panel legacy-subscribe-panel" id="subscribePanelLegacy" aria-hidden="true" aria-labelledby="subscribeTitleLegacy">
+    <button class="subscribe-close" id="subscribeCloseLegacy" type="button" aria-label="Close email signup">×</button>
+    <div class="subscribe-grid">
+      <div class="subscribe-copy">
+        <p class="subscribe-kicker">Stay in the loop</p>
+        <h2 id="subscribeTitleLegacy">Join the next build.</h2>
+        <p>Occasional notes on software, creative systems, experiments, and what I’m shipping next.</p>
+      </div>
+      <form id="subscribeFormLegacy">
+        <div class="subscribe-fields">
+          <input id="subscriberNameLegacy" name="name" type="text" autocomplete="name" placeholder="Your name" aria-label="Your name">
+          <input id="subscriberEmailLegacy" name="email" type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" required>
+          <button class="button subscribe-submit" type="submit">Subscribe</button>
+        </div>
+        <label class="subscribe-consent"><input name="consent" type="checkbox" required> I agree to receive occasional email updates and can unsubscribe at any time.</label>
+        <p class="subscribe-status" id="subscribeStatusLegacy" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </aside>
+
+  <footer><span>Nadi © 2026</span><span>Built frame by frame</span></footer>
+
+  <script>
+    /*
+      GLOBAL TIMELINE
+      ----------------
+      state.progress (0–1) is the only animation clock on the page.
+      The scroll handler only updates state; requestAnimationFrame reads
+      the smoothed value and renders the footage, DOM, HUD, and particles.
+    */
+    const state = {
+      scrollY: 0,
+      maxScroll: 1,
+      progress: 0,
+      smoothProgress: 0,
+      width: innerWidth,
+      height: innerHeight
+    };
+
+    const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+    const lerp = (a, b, amount) => a + (b - a) * amount;
+
+    // Remap one slice of the 0–1 timeline to any output range.
+    function mapRange(value, inMin, inMax, outMin, outMax) {
+      const t = clamp((value - inMin) / (inMax - inMin));
+      return outMin + (outMax - outMin) * t;
+    }
+
+    const TIMELINE = {
+      logoHold: [0.00, 0.15],
+      logoDock: [0.15, 0.30],
+      intro: [0.25, 0.45],
+      projects: [0.38, 0.52],
+      skills: [0.60, 0.80],
+      contact: [0.80, 1.00],
+      footage: [0.00, 0.32]
+    };
+
+    const CHAPTERS = [
+      { start: 0.00, label: "Hero / 01" },
+      { start: 0.25, label: "About / 02" },
+      { start: 0.40, label: "Projects / 03" },
+      { start: 0.62, label: "Skills / 04" },
+      { start: 0.82, label: "Contact / 05" }
+    ];
+
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const heroCanvas = document.querySelector("#heroCanvas");
+    const heroCtx = heroCanvas.getContext("2d", { alpha: false });
+    const fxCanvas = document.querySelector("#fxCanvas");
+    const fxCtx = fxCanvas.getContext("2d");
+
+    const elements = {
+      logoLayer: document.querySelector("#logoLayer"),
+      tagline: document.querySelector("#tagline"),
+      intro: document.querySelector("#introText"),
+      cards: [...document.querySelectorAll(".card")],
+      skills: document.querySelector("#skills .inner"),
+      contact: document.querySelector("#contact .inner"),
+      timecode: document.querySelector("#timecode"),
+      chapter: document.querySelector("#chapter"),
+      progressFill: document.querySelector("#progressFill"),
+      scrollCue: document.querySelector("#scrollCue"),
+      grade: document.querySelector("#grade")
+    };
+
+    /* Insert each public repository URL below. Once configured, the expanded
+       panel fetches and displays that repository's real README from GitHub. */
+    const PROJECTS = {
+      "guapclock": {
+        reel: "Reel 001", title: "GuapClock",
+        summary: "A desktop booth-time clock for producers that tracks studio sessions, creates organized artist folders, and writes invoice records.",
+        stack: "Java / Swing / Desktop Systems / File Automation",
+        repo: "https://github.com/nadidoug/guapclock",
+        readme: "<span class='readme-label'>README preview</span><h2>GuapClock</h2><p>A room-readable session clock designed to make booth time obvious, organized, and hard to dispute.</p>"
+      },
+      "vps-generator": {
+        reel: "Reel 002", title: "VPS Generator SaaS",
+        summary: "A full-stack deployment tool that converts infrastructure choices into downloadable, ready-to-run VPS setup scripts.",
+        stack: "React / TypeScript / Express / PostgreSQL / AWS",
+        repo: "https://github.com/nadidoug/vps-generator-saas",
+        readme: "<span class='readme-label'>README preview</span><h2>VPS Generator SaaS</h2><p>Select a Linux distribution, choose services, configure deployment settings, and generate a server script from one interface.</p>"
+      },
+      "retropong": {
+        reel: "Reel 003", title: "RetroPong",
+        summary: "A live neon arcade experiment rebuilt as a one-player goalie survival game for portrait and landscape play.",
+        stack: "JavaScript / Canvas / Responsive Game Design",
+        repo: "https://github.com/nadidoug/retropong",
+        readme: "<span class='readme-label'>README preview</span><h2>RetroPong</h2><p>A browser-based survival game with touch controls, escalating chaos waves, power orbs, and score tracking.</p>"
+      }
+    };
+
+    /* 95 optimized WebP frames were sampled from the supplied MOV. */
+    const FRAME_COUNT = 95;
+    const frames = Array.from({ length: FRAME_COUNT });
+    const loaded = new Set();
+
+    function framePath(index) {
+      return `assets/hero-frames/frame-${String(index + 1).padStart(3, "0")}.webp`;
+    }
+
+    function loadFrame(index) {
+      if (frames[index]) return;
+      const image = new Image();
+      image.decoding = "async";
+      image.src = framePath(index);
+      image.onload = () => loaded.add(index);
+      frames[index] = image;
+    }
+
+    // Start with the opening beat, then fill the sequence without blocking the page.
+    for (let index = 0; index < 12; index += 1) loadFrame(index);
+    const preload = () => {
+      for (let index = 12; index < FRAME_COUNT; index += 1) loadFrame(index);
+    };
+    if ("requestIdleCallback" in window) requestIdleCallback(preload, { timeout: 1400 });
+    else setTimeout(preload, 300);
+
+    let particles = [];
+    function resize() {
+      state.width = innerWidth;
+      state.height = innerHeight;
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      [heroCanvas, fxCanvas].forEach(canvas => {
+        canvas.width = Math.round(state.width * dpr);
+        canvas.height = Math.round(state.height * dpr);
+        canvas.style.width = `${state.width}px`;
+        canvas.style.height = `${state.height}px`;
+      });
+      heroCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      fxCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      state.maxScroll = Math.max(1, document.documentElement.scrollHeight - state.height);
+      particles = Array.from({ length: state.width < 700 ? 24 : 48 }, () => ({
+        x: Math.random() * state.width,
+        y: Math.random() * state.height,
+        radius: .5 + Math.random() * 1.8,
+        phase: Math.random() * Math.PI * 2,
+        drift: (Math.random() - .5) * .3
+      }));
+      updateScroll();
+    }
+
+    function updateScroll() {
+      state.scrollY = scrollY || pageYOffset;
+      state.progress = clamp(state.scrollY / state.maxScroll);
+    }
+
+    addEventListener("scroll", updateScroll, { passive: true });
+    addEventListener("resize", resize);
+
+    function nearestLoadedFrame(target) {
+      if (loaded.has(target)) return frames[target];
+      for (let distance = 1; distance < FRAME_COUNT; distance += 1) {
+        if (loaded.has(target - distance)) return frames[target - distance];
+        if (loaded.has(target + distance)) return frames[target + distance];
+      }
+      return null;
+    }
+
+    function renderFootage(progress) {
+      const footageProgress = mapRange(progress, ...TIMELINE.footage, 0, 1);
+      const frameIndex = Math.round(footageProgress * (FRAME_COUNT - 1));
+      loadFrame(frameIndex);
+      const image = nearestLoadedFrame(frameIndex);
+      heroCtx.fillStyle = "#0b0c0e";
+      heroCtx.fillRect(0, 0, state.width, state.height);
+      if (!image) return;
+
+      // Canvas equivalent of object-fit: cover, with a slight cinematic push-in.
+      const push = mapRange(progress, 0, .32, 1.02, 1.12);
+      const scale = Math.max(state.width / image.naturalWidth, state.height / image.naturalHeight) * push;
+      const width = image.naturalWidth * scale;
+      const height = image.naturalHeight * scale;
+      heroCtx.save();
+      const projectHold = 1 - mapRange(progress, .25, .45, 0, .68);
+      heroCtx.globalAlpha = projectHold - mapRange(progress, .65, .88, 0, .27);
+      heroCtx.filter = "saturate(.72) contrast(1.16) brightness(.72)";
+      heroCtx.drawImage(image, (state.width - width) / 2, (state.height - height) / 2, width, height);
+      heroCtx.restore();
+    }
+
+    function renderParticles(progress, time) {
+      fxCtx.clearRect(0, 0, state.width, state.height);
+      const visibility = mapRange(progress, .16, .72, .08, .72);
+      const speed = mapRange(progress, 0, 1, .2, 1.4);
+      const red = Math.round(lerp(255, 88, progress));
+      const green = Math.round(lerp(107, 124, progress));
+      const blue = Math.round(lerp(43, 255, progress));
+
+      particles.forEach((particle, index) => {
+        particle.y -= (.08 + (index % 5) * .025) * speed;
+        particle.x += particle.drift * speed;
+        if (particle.y < -8) particle.y = state.height + 8;
+        if (particle.x < -8) particle.x = state.width + 8;
+        if (particle.x > state.width + 8) particle.x = -8;
+        const pulse = .55 + Math.sin(time * .001 + particle.phase + progress * 7) * .45;
+        const radius = particle.radius * mapRange(progress, 0, 1, .7, 1.8);
+        fxCtx.beginPath();
+        fxCtx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${visibility * pulse})`;
+        fxCtx.arc(particle.x, particle.y, radius, 0, Math.PI * 2);
+        fxCtx.fill();
+      });
+    }
+
+    function renderDOM(progress) {
+      const dock = mapRange(progress, ...TIMELINE.logoDock, 0, 1);
+      const logoScale = lerp(1, .18, dock);
+      const logoY = lerp(0, -38, dock);
+      elements.logoLayer.style.transform = `translate(-50%, -50%) translateY(${logoY}vh) scale(${logoScale})`;
+      elements.tagline.style.opacity = 1 - dock;
+      elements.tagline.style.transform = `translateY(${-dock * 16}px)`;
+
+      const intro = mapRange(progress, ...TIMELINE.intro, 0, 1);
+      elements.intro.style.opacity = intro;
+      elements.intro.style.transform = `translateY(${lerp(70, 0, intro)}px)`;
+
+      elements.cards.forEach((card, index) => {
+        const cardIn = mapRange(progress, TIMELINE.projects[0] + index * .015, TIMELINE.projects[1], 0, 1);
+        card.style.opacity = cardIn;
+        card.style.transform = `translateY(${lerp(80, 0, cardIn)}px)`;
+      });
+
+      const skills = mapRange(progress, ...TIMELINE.skills, 0, 1);
+      elements.skills.style.opacity = skills;
+      elements.skills.style.transform = `translateY(${lerp(60, 0, skills)}px)`;
+
+      const contact = mapRange(progress, ...TIMELINE.contact, 0, 1);
+      elements.contact.style.opacity = contact;
+      elements.contact.style.transform = `translateY(${lerp(60, 0, contact)}px)`;
+
+      elements.scrollCue.style.opacity = 1 - mapRange(progress, .015, .08, 0, 1);
+      elements.progressFill.style.height = `${progress * 100}%`;
+      elements.grade.style.opacity = mapRange(progress, .18, .5, 1, .72);
+
+      const seconds = progress * 180;
+      const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
+      const wholeSeconds = String(Math.floor(seconds % 60)).padStart(2, "0");
+      const frames24 = String(Math.floor((seconds % 1) * 24)).padStart(2, "0");
+      elements.timecode.textContent = `${minutes}:${wholeSeconds}:${frames24}`;
+      let active = CHAPTERS[0].label;
+      CHAPTERS.forEach(chapter => { if (progress >= chapter.start) active = chapter.label; });
+      elements.chapter.textContent = active;
+    }
+
+    const projectDialog = document.querySelector("#projectDialog");
+    const dialogClose = document.querySelector("#dialogClose");
+    const dialogTitle = document.querySelector("#dialogTitle");
+    const dialogReel = document.querySelector("#dialogReel");
+    const dialogSummary = document.querySelector("#dialogSummary");
+    const dialogStack = document.querySelector("#dialogStack");
+    const dialogReadme = document.querySelector("#dialogReadme");
+    const dialogRepo = document.querySelector("#dialogRepo");
+
+    async function openProject(projectKey) {
+      const project = PROJECTS[projectKey];
+      if (!project) return;
+      dialogTitle.textContent = project.title;
+      dialogReel.textContent = project.reel;
+      dialogSummary.textContent = project.summary;
+      dialogStack.textContent = project.stack;
+      dialogReadme.innerHTML = project.readme;
+      dialogRepo.hidden = !project.repo;
+      if (project.repo) dialogRepo.href = project.repo;
+      projectDialog.showModal();
+
+      if (!project.repo) return;
+      const match = project.repo.match(/github\.com\/([^/]+)\/([^/#?]+)/i);
+      if (!match) return;
+      dialogReadme.innerHTML = "<span class='readme-label'>README</span><p>Loading from GitHub…</p>";
+      try {
+        const response = await fetch(`https://api.github.com/repos/${match[1]}/${match[2]}/readme`, {
+          headers: { Accept: "application/vnd.github.raw+json" }
+        });
+        if (!response.ok) throw new Error("README unavailable");
+        const markdown = await response.text();
+        const escaped = markdown.replace(/[&<>]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[character]);
+        dialogReadme.innerHTML = `<span class="readme-label">README from GitHub</span><pre>${escaped}</pre>`;
+      } catch (error) {
+        dialogReadme.innerHTML = project.readme;
+      }
+    }
+
+    elements.cards.forEach(card => card.addEventListener("click", () => openProject(card.dataset.project)));
+    dialogClose.addEventListener("click", () => projectDialog.close());
+    projectDialog.addEventListener("click", event => {
+      if (event.target === projectDialog) projectDialog.close();
+    });
+
+    const emailToggle = document.querySelector("#emailToggle");
+    const subscribePanel = document.querySelector("#subscribePanel");
+    const subscribeClose = document.querySelector("#subscribeClose");
+    const subscribeForm = document.querySelector("#subscribeForm");
+    const subscriberName = document.querySelector("#subscriberName");
+    const subscriberEmail = document.querySelector("#subscriberEmail");
+    const subscribeStatus = document.querySelector("#subscribeStatus");
+    let subscribeAutoShown = false;
+
+    function setSubscribePanel(open, dismissed = false, focusField = false) {
+      subscribePanel.classList.toggle("open", open);
+      subscribePanel.setAttribute("aria-hidden", String(!open));
+      emailToggle.setAttribute("aria-expanded", String(open));
+      if (dismissed) sessionStorage.setItem("nadi-subscribe-dismissed", "true");
+      if (open && focusField) setTimeout(() => subscriberEmail.focus(), 560);
+    }
+
+    emailToggle.addEventListener("click", () => {
+      const opening = !subscribePanel.classList.contains("open");
+      setSubscribePanel(opening, !opening, opening);
+    });
+    subscribeClose.addEventListener("click", () => setSubscribePanel(false, true));
+    subscribeForm.addEventListener("submit", event => {
+      event.preventDefault();
+      if (!subscribeForm.reportValidity()) return;
+      subscribeStatus.textContent = "You are on the preview list. No email was sent.";
+      subscribeForm.reset();
+    });
+
+    function tick(time) {
+      state.smoothProgress = reduceMotion
+        ? state.progress
+        : lerp(state.smoothProgress, state.progress, .085);
+      renderFootage(state.smoothProgress);
+      renderParticles(state.smoothProgress, time);
+      renderDOM(state.smoothProgress);
+      if (state.smoothProgress >= .94 && !subscribeAutoShown && !sessionStorage.getItem("nadi-subscribe-dismissed")) {
+        subscribeAutoShown = true;
+        setSubscribePanel(true);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    resize();
+    requestAnimationFrame(tick);
+  </script>
 </body>
 </html>
-
