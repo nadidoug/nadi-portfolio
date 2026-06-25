@@ -213,6 +213,7 @@
     #about { height: 150vh; }
     #projects { height: 190vh; align-items: flex-start; padding-top: 12vh; }
     #skills { height: 140vh; }
+    #automation { height: 190vh; align-items: flex-start; padding-top: 14vh; }
     #contact { height: 170vh; }
 
     .inner { width: min(1080px, 100%); margin: 0 auto; }
@@ -318,6 +319,7 @@
     .repo-link[hidden] { display: none; }
 
     #skills .inner,
+    #automation .inner,
     #contact .inner {
       opacity: 0;
       transform: translateY(60px);
@@ -333,6 +335,120 @@
       color: rgba(242, 239, 232, .8);
       font: 400 clamp(.7rem, 1vw, .8rem)/1 var(--mono);
       letter-spacing: .04em;
+    }
+
+    .automation-wrap { width: min(1180px, 100%); }
+    .automation-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, .78fr) minmax(420px, 1.22fr);
+      gap: clamp(34px, 7vw, 110px);
+      align-items: start;
+    }
+    .automation-copy h2 {
+      max-width: 620px;
+      font: 600 clamp(3.2rem, 8vw, 8rem)/.88 var(--display);
+      letter-spacing: -.02em;
+      text-transform: uppercase;
+    }
+    .automation-copy .service-lede {
+      margin-top: 28px;
+      max-width: 560px;
+      color: var(--paper);
+      font-size: clamp(1.05rem, 1.8vw, 1.45rem);
+      line-height: 1.45;
+    }
+    .automation-copy .service-body {
+      margin-top: 18px;
+      max-width: 590px;
+      color: rgba(242, 239, 232, .68);
+      font-size: .96rem;
+      line-height: 1.78;
+    }
+    .service-caption {
+      margin-top: 42px;
+      color: var(--orange);
+      font: 500 10px/1.7 var(--mono);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .workflow-panel {
+      padding: clamp(20px, 3vw, 34px);
+      border: 1px solid rgba(242, 239, 232, .24);
+      background: linear-gradient(145deg, rgba(20, 22, 26, .93), rgba(8, 9, 11, .82));
+      box-shadow: 0 28px 90px rgba(0, 0, 0, .34);
+      backdrop-filter: blur(20px) saturate(.86);
+    }
+    .workflow-kicker {
+      margin-bottom: 18px;
+      color: var(--blue);
+      font: 500 10px/1 var(--mono);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .workflow-list { display: grid; gap: 0; }
+    .workflow-step {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(18px);
+      will-change: opacity, transform;
+    }
+    .workflow-node {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1px solid rgba(242, 239, 232, .18);
+      background: rgba(255, 255, 255, .045);
+      color: rgba(242, 239, 232, .84);
+      font: 500 10px/1.2 var(--mono);
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      transition: border-color .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+    }
+    .workflow-node:hover {
+      color: var(--paper);
+      border-color: rgba(255, 107, 43, .78);
+      background: rgba(255, 107, 43, .075);
+      box-shadow: 0 0 28px rgba(255, 107, 43, .18);
+    }
+    .workflow-connector {
+      height: 18px;
+      width: 1px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, rgba(255, 107, 43, 0), rgba(255, 107, 43, var(--connector-glow, 0)), rgba(124, 156, 255, 0));
+      box-shadow: 0 0 calc(14px * var(--connector-glow, 0)) rgba(124, 156, 255, .45);
+      opacity: var(--connector-glow, 0);
+    }
+    .automation-stats {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .automation-stat {
+      min-height: 118px;
+      padding: 18px 14px;
+      border: 1px solid rgba(242, 239, 232, .18);
+      background: rgba(8, 9, 11, .58);
+      box-shadow: 0 18px 54px rgba(0, 0, 0, .24);
+      opacity: 0;
+      transform: translateY(26px);
+      will-change: opacity, transform;
+    }
+    .automation-stat strong {
+      display: block;
+      color: var(--paper);
+      font: 600 clamp(1.65rem, 3vw, 2.9rem)/.9 var(--display);
+      text-transform: uppercase;
+    }
+    .automation-stat span {
+      display: block;
+      margin-top: 12px;
+      color: var(--muted);
+      font: 500 9px/1.45 var(--mono);
+      letter-spacing: .13em;
+      text-transform: uppercase;
     }
 
     #contact .inner { position: relative; top: 40vh; text-align: center; max-width: 1000px; }
@@ -447,6 +563,11 @@
       .cards { grid-template-columns: 1fr; }
       .card { min-height: 250px; }
       #projects { height: 230vh; padding-top: 10vh; }
+      #automation { height: auto; min-height: 180vh; padding-top: 12vh; padding-bottom: 14vh; }
+      .automation-grid { grid-template-columns: 1fr; gap: 36px; }
+      .automation-copy h2 { font-size: clamp(3rem, 14vw, 6.4rem); }
+      .workflow-panel { padding: 20px; }
+      .automation-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .section-heading { margin-bottom: 30px; }
       .progress-rail { display: none; }
       .topbar { padding: 18px 20px; }
@@ -490,6 +611,8 @@
       .topbar { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
       .card { padding: 23px; }
       .dialog-body { padding: 30px 22px 42px; }
+      .automation-stats { grid-template-columns: 1fr; }
+      .workflow-node { padding: 12px 13px; font-size: 9px; letter-spacing: .11em; }
       .subscribe-copy h2 { font-size: clamp(1.9rem, 10vw, 2.7rem); }
       .subscribe-close { top: 12px; right: 12px; width: 34px; height: 34px; }
     }
@@ -497,6 +620,11 @@
     @media (orientation: landscape) and (max-height: 540px) {
       .scroll-cue { display: none; }
       #tagline { margin-top: 18px; min-height: 36px; }
+      #automation { height: auto; padding-top: 18vh; padding-bottom: 18vh; }
+      .automation-grid { grid-template-columns: 1fr; gap: 24px; }
+      .automation-copy h2 { font-size: 3rem; }
+      .automation-copy .service-body { display: none; }
+      .automation-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .subscribe-panel.open { max-height: 72vh; padding-top: 14px; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
       .subscribe-grid { grid-template-columns: minmax(210px, .8fr) minmax(420px, 1.2fr); gap: 28px; }
       .subscribe-copy { padding-right: 0; }
@@ -508,7 +636,8 @@
     @media (prefers-reduced-motion: reduce) {
       .grain { animation: none; }
       .scroll-cue { display: none; }
-      .statement, .card, #skills .inner, #contact .inner { opacity: 1 !important; transform: none !important; }
+      .statement, .card, #skills .inner, #automation .inner, #contact .inner, .workflow-step, .automation-stat { opacity: 1 !important; transform: none !important; }
+      .workflow-connector { opacity: 1 !important; --connector-glow: 1 !important; }
     }
   </style>
 </head>
@@ -576,6 +705,54 @@
           <span class="skill">JavaScript</span><span class="skill">React</span><span class="skill">Node</span>
           <span class="skill">Python</span><span class="skill">APIs</span><span class="skill">GitHub</span>
           <span class="skill">Automation</span><span class="skill">Video</span><span class="skill">Social Media Systems</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="automation" aria-label="Customer Automation service">
+      <div class="inner automation-wrap">
+        <div class="automation-grid">
+          <div class="automation-copy">
+            <span class="eyebrow">Service System</span>
+            <h2>Customer Automation</h2>
+            <p class="service-lede">Turn repetitive business tasks into automated workflows.</p>
+            <p class="service-body">We build systems that automatically capture leads, follow up with customers, send email campaigns, schedule appointments, request reviews, generate reports, and connect to CRMs.</p>
+            <p class="service-caption">Less manual work.<br>More repeat customers.</p>
+          </div>
+
+          <div class="automation-board">
+            <div class="workflow-panel">
+              <p class="workflow-kicker">Live workflow</p>
+              <div class="workflow-list" aria-label="Customer automation workflow">
+                <div class="workflow-step"><div class="workflow-node">Website Form</div></div>
+                <div class="workflow-connector" aria-hidden="true"></div>
+                <div class="workflow-step"><div class="workflow-node">Customer Database</div></div>
+                <div class="workflow-connector" aria-hidden="true"></div>
+                <div class="workflow-step"><div class="workflow-node">Automation Engine</div></div>
+                <div class="workflow-connector" aria-hidden="true"></div>
+                <div class="workflow-step"><div class="workflow-node">Welcome Email</div></div>
+                <div class="workflow-connector" aria-hidden="true"></div>
+                <div class="workflow-step"><div class="workflow-node">Appointment Reminder</div></div>
+                <div class="workflow-connector" aria-hidden="true"></div>
+                <div class="workflow-step"><div class="workflow-node">Follow-Up Campaign</div></div>
+                <div class="workflow-connector" aria-hidden="true"></div>
+                <div class="workflow-step"><div class="workflow-node">Review Request</div></div>
+                <div class="workflow-connector" aria-hidden="true"></div>
+                <div class="workflow-step"><div class="workflow-node">Monthly Report</div></div>
+                <div class="workflow-connector" aria-hidden="true"></div>
+                <div class="workflow-step"><div class="workflow-node">CRM Sync</div></div>
+                <div class="workflow-connector" aria-hidden="true"></div>
+                <div class="workflow-step"><div class="workflow-node">Happy Customer</div></div>
+              </div>
+            </div>
+
+            <div class="automation-stats" aria-label="Customer automation statistics">
+              <div class="automation-stat"><strong>1000+</strong><span>Customers Managed</span></div>
+              <div class="automation-stat"><strong>24/7</strong><span>Automation Running</span></div>
+              <div class="automation-stat"><strong>98%</strong><span>Email Delivery</span></div>
+              <div class="automation-stat"><strong>Unlimited</strong><span>Custom Workflows</span></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -681,8 +858,9 @@
       logoDock: [0.15, 0.30],
       intro: [0.25, 0.45],
       projects: [0.27, 0.36],
-      skills: [0.60, 0.80],
-      contact: [0.80, 1.00],
+      skills: [0.54, 0.68],
+      automation: [0.66, 0.86],
+      contact: [0.86, 1.00],
       footage: [0.00, 0.32]
     };
 
@@ -690,8 +868,9 @@
       { start: 0.00, label: "Hero / 01" },
       { start: 0.25, label: "About / 02" },
       { start: 0.31, label: "Projects / 03" },
-      { start: 0.62, label: "Skills / 04" },
-      { start: 0.82, label: "Contact / 05" }
+      { start: 0.58, label: "Skills / 04" },
+      { start: 0.70, label: "Automation / 05" },
+      { start: 0.88, label: "Contact / 06" }
     ];
 
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -709,6 +888,10 @@
       intro: document.querySelector("#introText"),
       cards: [...document.querySelectorAll(".card")],
       skills: document.querySelector("#skills .inner"),
+      automation: document.querySelector("#automation .inner"),
+      workflowSteps: [...document.querySelectorAll(".workflow-step")],
+      workflowConnectors: [...document.querySelectorAll(".workflow-connector")],
+      automationStats: [...document.querySelectorAll(".automation-stat")],
       contact: document.querySelector("#contact .inner"),
       timecode: document.querySelector("#timecode"),
       chapter: document.querySelector("#chapter"),
@@ -891,6 +1074,29 @@
       const skills = mapRange(progress, ...TIMELINE.skills, 0, 1);
       elements.skills.style.opacity = skills;
       elements.skills.style.transform = `translateY(${lerp(60, 0, skills)}px)`;
+
+      const automation = mapRange(progress, ...TIMELINE.automation, 0, 1);
+      elements.automation.style.opacity = automation;
+      elements.automation.style.transform = `translateY(${lerp(64, 0, automation)}px)`;
+
+      elements.workflowSteps.forEach((step, index) => {
+        const stepIn = mapRange(progress, TIMELINE.automation[0] + .035 + index * .012, TIMELINE.automation[0] + .105 + index * .012, 0, 1);
+        const stepEase = 1 - Math.pow(1 - stepIn, 2.4);
+        step.style.opacity = stepEase;
+        step.style.transform = `translateY(${lerp(18, 0, stepEase)}px)`;
+      });
+
+      elements.workflowConnectors.forEach((connector, index) => {
+        const lineIn = mapRange(progress, TIMELINE.automation[0] + .054 + index * .012, TIMELINE.automation[0] + .12 + index * .012, 0, 1);
+        connector.style.setProperty("--connector-glow", lineIn);
+      });
+
+      elements.automationStats.forEach((stat, index) => {
+        const statIn = mapRange(progress, TIMELINE.automation[1] - .09 + index * .016, TIMELINE.automation[1] - .01 + index * .016, 0, 1);
+        const statEase = 1 - Math.pow(1 - statIn, 2.2);
+        stat.style.opacity = statEase;
+        stat.style.transform = `translateY(${lerp(26, 0, statEase)}px)`;
+      });
 
       const contact = mapRange(progress, ...TIMELINE.contact, 0, 1);
       elements.contact.style.opacity = contact;
