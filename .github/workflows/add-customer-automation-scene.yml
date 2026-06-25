@@ -1,0 +1,264 @@
+name: Add Customer Automation Scene
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/add-customer-automation-scene.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Insert automation scene after tools
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('nadi-portfolio.html')
+          s = p.read_text(encoding='utf-8')
+
+          css = r'''
+
+    .automation-scene {
+      margin-top: clamp(44px, 9vh, 96px);
+      display: grid;
+      grid-template-columns: minmax(260px, .8fr) minmax(320px, 1.2fr);
+      gap: clamp(24px, 6vw, 76px);
+      align-items: center;
+      opacity: 0;
+      transform: translateY(70px);
+      will-change: opacity, transform;
+    }
+    .automation-copy h2 {
+      max-width: 620px;
+      font: 600 clamp(3rem, 7vw, 7rem)/.9 var(--display);
+      letter-spacing: -.02em;
+      text-transform: uppercase;
+    }
+    .automation-copy p {
+      max-width: 520px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: clamp(.9rem, 1.2vw, 1.05rem);
+      line-height: 1.7;
+    }
+    .automation-final {
+      display: inline-flex;
+      margin-top: 28px;
+      color: var(--orange);
+      font: 500 10px/1.5 var(--mono);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .automation-board {
+      position: relative;
+      padding: clamp(18px, 3vw, 30px);
+      border: 1px solid rgba(242, 239, 232, .24);
+      background: linear-gradient(145deg, rgba(20, 22, 26, .88), rgba(8, 9, 11, .80));
+      box-shadow: 0 22px 70px rgba(0, 0, 0, .28);
+      backdrop-filter: blur(18px) saturate(.8);
+      overflow: hidden;
+    }
+    .automation-board::before {
+      content: "";
+      position: absolute;
+      inset: -35%;
+      background: radial-gradient(circle at 72% 20%, rgba(255, 107, 43, .20), transparent 32%), radial-gradient(circle at 25% 88%, rgba(88, 124, 255, .18), transparent 34%);
+      opacity: .65;
+      animation: automationPulse 4.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes automationPulse {
+      0%, 100% { transform: scale(1); opacity: .45; }
+      50% { transform: scale(1.06); opacity: .75; }
+    }
+    .workflow-list {
+      position: relative;
+      display: grid;
+      gap: 10px;
+      z-index: 1;
+    }
+    .workflow-node {
+      position: relative;
+      padding: 13px 15px;
+      border: 1px solid var(--line);
+      background: rgba(8, 9, 11, .62);
+      color: var(--paper);
+      opacity: 0;
+      transform: translateX(38px);
+      transition: border-color .25s ease, background .25s ease;
+    }
+    .workflow-node::before {
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: linear-gradient(var(--orange), var(--blue));
+      box-shadow: 0 0 14px rgba(255, 107, 43, .38);
+      opacity: .65;
+    }
+    .workflow-node:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      left: 23px;
+      bottom: -11px;
+      width: 1px;
+      height: 10px;
+      background: linear-gradient(var(--orange), transparent);
+      box-shadow: 0 0 10px rgba(255, 107, 43, .5);
+    }
+    .workflow-node:hover {
+      border-color: rgba(255, 107, 43, .9);
+      background: rgba(20, 22, 26, .9);
+    }
+    .workflow-node strong {
+      display: block;
+      font: 600 clamp(1.1rem, 2.1vw, 1.85rem)/1 var(--display);
+      text-transform: uppercase;
+      letter-spacing: -.01em;
+    }
+    .workflow-node span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font: 400 .74rem/1.45 var(--mono);
+      letter-spacing: .02em;
+    }
+    .workflow-node.branch { margin-left: clamp(18px, 4vw, 44px); }
+    .automation-stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .automation-stat {
+      padding: 14px 10px;
+      border: 1px solid var(--line);
+      background: rgba(8, 9, 11, .5);
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    .automation-stat b {
+      display: block;
+      color: var(--orange);
+      font: 600 clamp(1.25rem, 2.4vw, 2.1rem)/1 var(--display);
+      text-transform: uppercase;
+    }
+    .automation-stat span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font: 400 8px/1.35 var(--mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+'''
+          if '.automation-scene' not in s:
+              marker = '    .skill {\n'
+              idx = s.find(marker)
+              if idx == -1:
+                  raise SystemExit('skill css marker not found')
+              # Insert before contact CSS by anchoring footer of skill section CSS region.
+              insert_after = '    .legacy-subscribe-panel { display: none; }\n'
+              if insert_after in s:
+                  s = s.replace(insert_after, insert_after + css, 1)
+              else:
+                  s = s.replace('    .button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }\n', '    .button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }\n' + css, 1)
+
+          mobile_css = r'''
+      .automation-scene { grid-template-columns: 1fr; margin-top: 58px; }
+      .automation-board { padding: 16px; }
+      .automation-stats { grid-template-columns: repeat(2, 1fr); }
+      .workflow-node.branch { margin-left: 16px; }
+'''
+          if '.automation-stats { grid-template-columns: repeat(2, 1fr); }' not in s:
+              s = s.replace('      .actions .button { flex: 1 1 130px; }\n', '      .actions .button { flex: 1 1 130px; }\n' + mobile_css, 1)
+
+          reduced = '      .statement, .card, #skills .inner, #contact .inner { opacity: 1 !important; transform: none !important; }'
+          if reduced in s and '.automation-scene, .workflow-node, .automation-stat' not in s:
+              s = s.replace(reduced, '      .statement, .card, #skills .inner, #contact .inner, .automation-scene, .workflow-node, .automation-stat { opacity: 1 !important; transform: none !important; }')
+
+          html = r'''
+        <div class="automation-scene" id="automationScene" aria-label="Customer Automation service workflow">
+          <div class="automation-copy">
+            <span class="eyebrow">Service system</span>
+            <h2>Customer Automation</h2>
+            <p>Automate customer communication from the first interaction to the next sale. We connect forms, customer data, email, follow-ups, reviews, reports, and CRM updates into one running workflow.</p>
+            <span class="automation-final">Less manual work. More repeat customers.</span>
+          </div>
+          <div class="automation-board">
+            <div class="workflow-list">
+              <div class="workflow-node"><strong>Website Form</strong><span>Capture every lead automatically.</span></div>
+              <div class="workflow-node"><strong>Customer Database</strong><span>Securely organize customer information.</span></div>
+              <div class="workflow-node"><strong>Automation Engine</strong><span>Runs business workflows 24/7.</span></div>
+              <div class="workflow-node branch"><strong>Welcome Email</strong><span>Instant confirmation.</span></div>
+              <div class="workflow-node branch"><strong>Appointment Reminder</strong><span>Reduce missed bookings.</span></div>
+              <div class="workflow-node branch"><strong>Follow-Up Campaign</strong><span>Bring customers back.</span></div>
+              <div class="workflow-node branch"><strong>Review Request</strong><span>Increase online reviews automatically.</span></div>
+              <div class="workflow-node branch"><strong>Monthly Report</strong><span>Show what the system did.</span></div>
+              <div class="workflow-node"><strong>Happy Customer</strong><span>Better service with less manual work.</span></div>
+            </div>
+            <div class="automation-stats">
+              <div class="automation-stat"><b>1000+</b><span>Customers Managed</span></div>
+              <div class="automation-stat"><b>24/7</b><span>Automation Running</span></div>
+              <div class="automation-stat"><b>98%</b><span>Email Delivery</span></div>
+              <div class="automation-stat"><b>∞</b><span>Custom Workflows</span></div>
+            </div>
+          </div>
+        </div>
+'''
+          if 'id="automationScene"' not in s:
+              s = s.replace('''          <span class="skill">Automation</span><span class="skill">Video</span><span class="skill">Social Media Systems</span>
+        </div>''', '''          <span class="skill">Automation</span><span class="skill">Video</span><span class="skill">Social Media Systems</span>
+        </div>''' + html, 1)
+
+          s = s.replace('      skills: [0.60, 0.80],\n      contact: [0.80, 1.00],', '      skills: [0.60, 0.72],\n      automation: [0.72, 0.88],\n      contact: [0.88, 1.00],')
+          s = s.replace('      { start: 0.62, label: "Skills / 04" },\n      { start: 0.82, label: "Contact / 05" }', '      { start: 0.62, label: "Skills / 04" },\n      { start: 0.74, label: "Automation / 05" },\n      { start: 0.89, label: "Contact / 06" }')
+          s = s.replace('      skills: document.querySelector("#skills .inner"),\n      contact: document.querySelector("#contact .inner"),', '      skills: document.querySelector("#skills .inner"),\n      automation: document.querySelector("#automationScene"),\n      automationNodes: [...document.querySelectorAll(".workflow-node")],\n      automationStats: [...document.querySelectorAll(".automation-stat")],\n      contact: document.querySelector("#contact .inner"),')
+
+          render_old = '''      const skills = mapRange(progress, ...TIMELINE.skills, 0, 1);
+      elements.skills.style.opacity = skills;
+      elements.skills.style.transform = `translateY(${lerp(60, 0, skills)}px)`;
+
+      const contact = mapRange(progress, ...TIMELINE.contact, 0, 1);'''
+          render_new = '''      const skills = mapRange(progress, ...TIMELINE.skills, 0, 1);
+      elements.skills.style.opacity = skills;
+      elements.skills.style.transform = `translateY(${lerp(60, 0, skills)}px)`;
+
+      const automation = mapRange(progress, ...TIMELINE.automation, 0, 1);
+      if (elements.automation) {
+        elements.automation.style.opacity = automation;
+        elements.automation.style.transform = `translateY(${lerp(70, 0, automation)}px)`;
+      }
+      elements.automationNodes.forEach((node, index) => {
+        const nodeIn = mapRange(progress, TIMELINE.automation[0] + index * .012, TIMELINE.automation[1], 0, 1);
+        node.style.opacity = nodeIn;
+        node.style.transform = `translateX(${lerp(38, 0, nodeIn)}px)`;
+      });
+      elements.automationStats.forEach((stat, index) => {
+        const statIn = mapRange(progress, TIMELINE.automation[0] + .07 + index * .012, TIMELINE.automation[1], 0, 1);
+        stat.style.opacity = statIn;
+        stat.style.transform = `translateY(${lerp(24, 0, statIn)}px)`;
+      });
+
+      const contact = mapRange(progress, ...TIMELINE.contact, 0, 1);'''
+          if render_old in s and 'automationNodes.forEach' not in s:
+              s = s.replace(render_old, render_new, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add nadi-portfolio.html
+          git diff --cached --quiet || git commit -m "Add customer automation scroll scene"
+          git push
