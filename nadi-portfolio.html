@@ -475,6 +475,7 @@
     .button:hover,
     .button:focus-visible { color: var(--ink); background: var(--paper); border-color: var(--paper); }
     .button:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+    .button:disabled { cursor: wait; opacity: .62; }
     .email-trigger { cursor: pointer; }
 
     .subscribe-panel {
@@ -1187,6 +1188,7 @@
     const subscriberName = document.querySelector("#subscriberName");
     const subscriberEmail = document.querySelector("#subscriberEmail");
     const subscribeStatus = document.querySelector("#subscribeStatus");
+    const SUBSCRIBE_ENDPOINT = "https://yattojbkdupvahegedzv.supabase.co/functions/v1/portfolio-submit";
     let subscribeAutoShown = false;
 
     function setSubscribePanel(open, dismissed = false, focusField = false) {
@@ -1209,11 +1211,35 @@
       setSubscribePanel(opening, !opening, opening);
     });
     subscribeClose.addEventListener("click", () => setSubscribePanel(false, true));
-    subscribeForm.addEventListener("submit", event => {
+    subscribeForm.addEventListener("submit", async event => {
       event.preventDefault();
       if (!subscribeForm.reportValidity()) return;
-      subscribeStatus.textContent = "You are on the preview list. No email was sent.";
-      subscribeForm.reset();
+      const submitButton = subscribeForm.querySelector(".subscribe-submit");
+      const originalText = submitButton.textContent;
+      subscribeStatus.textContent = "Adding you to the list...";
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending";
+
+      try {
+        const response = await fetch(SUBSCRIBE_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "newsletter",
+            name: subscriberName.value.trim(),
+            email: subscriberEmail.value.trim()
+          })
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.error) throw new Error(result.error || "Signup failed.");
+        subscribeStatus.textContent = "You are on the list. Check your email for the welcome note.";
+        subscribeForm.reset();
+      } catch (error) {
+        subscribeStatus.textContent = "Something did not send. Try again or email nadi@nadidoug.com.";
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+      }
     });
 
     function tick(time) {
