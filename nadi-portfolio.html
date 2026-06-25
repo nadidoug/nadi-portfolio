@@ -299,7 +299,7 @@
       letter-spacing: .04em;
     }
 
-    #contact .inner { position: relative; top: 50vh; text-align: center; max-width: 1000px; }
+    #contact .inner { position: relative; top: 40vh; text-align: center; max-width: 1000px; }
     #contact > .inner > h2 {
       margin-bottom: 48px;
       font: 600 clamp(3.2rem, 9vw, 9rem)/.9 var(--display);
@@ -345,7 +345,7 @@
     }
     .subscribe-panel.open {
       max-height: min(43vh, 320px);
-      margin-top: 30px;
+      margin-top: 22px;
       padding-top: clamp(18px, 2.4vw, 28px);
       padding-bottom: max(clamp(18px, 2.4vw, 28px), calc(env(safe-area-inset-bottom) + 14px));
       opacity: 1;
@@ -389,9 +389,9 @@
     }
     .subscribe-fields input:focus { border-color: var(--orange); }
     .subscribe-submit { min-width: 140px; cursor: pointer; }
-    .subscribe-consent { display: flex; align-items: flex-start; gap: 9px; margin-top: 12px; color: var(--muted); font: 400 9px/1.5 var(--mono); }
+    .subscribe-consent { display: flex; align-items: flex-start; gap: 9px; margin-top: 12px; color: var(--muted); font: 400 9px/1.5 var(--mono); transform: translateY(-40px); }
     .subscribe-consent input { margin-top: 2px; accent-color: var(--orange); }
-    .subscribe-status { min-height: 18px; margin-top: 10px; color: var(--paper); font: 400 10px/1.5 var(--mono); }
+    .subscribe-status { min-height: 18px; margin-top: 10px; color: var(--paper); font: 400 10px/1.5 var(--mono); transform: translateY(-40px); }
     .legacy-subscribe-panel { display: none; }
 
     footer {
@@ -415,7 +415,7 @@
       .progress-rail { display: none; }
       .topbar { padding: 18px 20px; }
       .chapter { display: none; }
-      #contact .inner { top: 44vh; }
+      #contact .inner { top: 34vh; }
       .subscribe-grid { grid-template-columns: 1fr; gap: 24px; }
       .subscribe-fields { grid-template-columns: 1fr; }
       .subscribe-copy { padding-right: 38px; }
@@ -571,21 +571,21 @@
   </dialog>
 
   <aside class="subscribe-panel legacy-subscribe-panel" id="subscribePanelLegacy" aria-hidden="true" aria-labelledby="subscribeTitleLegacy">
-    <button class="subscribe-close" id="subscribeClose" type="button" aria-label="Close email signup">×</button>
+    <button class="subscribe-close" id="subscribeCloseLegacy" type="button" aria-label="Close email signup">×</button>
     <div class="subscribe-grid">
       <div class="subscribe-copy">
         <p class="subscribe-kicker">Stay in the loop</p>
         <h2 id="subscribeTitleLegacy">Join the next build.</h2>
         <p>Occasional notes on software, creative systems, experiments, and what I’m shipping next.</p>
       </div>
-      <form id="subscribeForm">
+      <form id="subscribeFormLegacy">
         <div class="subscribe-fields">
-          <input id="subscriberName" name="name" type="text" autocomplete="name" placeholder="Your name" aria-label="Your name">
-          <input id="subscriberEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" required>
+          <input id="subscriberNameLegacy" name="name" type="text" autocomplete="name" placeholder="Your name" aria-label="Your name">
+          <input id="subscriberEmailLegacy" name="email" type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" required>
           <button class="button subscribe-submit" type="submit">Subscribe</button>
         </div>
         <label class="subscribe-consent"><input name="consent" type="checkbox" required> I agree to receive occasional email updates and can unsubscribe at any time.</label>
-        <p class="subscribe-status" id="subscribeStatus" role="status" aria-live="polite"></p>
+        <p class="subscribe-status" id="subscribeStatusLegacy" role="status" aria-live="polite"></p>
       </form>
     </div>
   </aside>
@@ -903,10 +903,8 @@
     subscribeForm.addEventListener("submit", event => {
       event.preventDefault();
       if (!subscribeForm.reportValidity()) return;
-      const subject = encodeURIComponent("Portfolio email list signup");
-      const body = encodeURIComponent(`Please add ${subscriberName.value || "me"} (${subscriberEmail.value}) to the Nadi email list.`);
-      subscribeStatus.textContent = "Opening your email app to confirm the subscription…";
-      window.location.href = `mailto:nadi@nadidoug.com?subject=${subject}&body=${body}`;
+      subscribeStatus.textContent = "You are on the preview list. No email was sent.";
+      subscribeForm.reset();
     });
 
     function tick(time) {
