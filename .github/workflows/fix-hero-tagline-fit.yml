@@ -1,0 +1,158 @@
+name: Fix Hero Tagline Fit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/fix-hero-tagline-fit.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch hero tagline layout
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('nadi-portfolio.html')
+          s = p.read_text(encoding='utf-8')
+
+          # Keep the hero lockup centered and prevent the tagline words from overflowing.
+          s = s.replace(
+'''    #logoLayer {
+      position: fixed;
+      z-index: 30;
+      top: 44vh;
+      left: 50%;
+      width: min(94vw, 1500px);
+      text-align: center;
+      pointer-events: none;
+      will-change: transform;
+      transform: translate(-50%, -50%);
+    }''',
+'''    #logoLayer {
+      position: fixed;
+      z-index: 30;
+      top: 44vh;
+      left: 50%;
+      width: min(92vw, 1320px);
+      text-align: center;
+      pointer-events: none;
+      will-change: transform;
+      transform: translate(-50%, -50%);
+    }''')
+
+          s = s.replace(
+'''    #tagline {
+      margin-top: clamp(26px, 5vh, 54px);
+      min-height: 52px;
+      display: grid;
+      grid-template-columns: minmax(110px, 1fr) auto minmax(110px, 1fr);
+      align-items: center;
+      column-gap: clamp(12px, 2.2vw, 34px);
+      font: 400 clamp(.66rem, 1.2vw, .84rem)/1.7 var(--mono);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba(242, 239, 232, .78);
+      will-change: opacity, transform;
+    }''',
+'''    #tagline {
+      width: min(100%, 980px);
+      margin: clamp(24px, 4.5vh, 48px) auto 0;
+      min-height: 52px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(max-content, auto) minmax(0, 1fr);
+      align-items: center;
+      justify-items: center;
+      column-gap: clamp(8px, 1.6vw, 24px);
+      font: 400 clamp(.56rem, .95vw, .78rem)/1.55 var(--mono);
+      letter-spacing: clamp(.08em, .16vw, .18em);
+      text-transform: uppercase;
+      color: rgba(242, 239, 232, .78);
+      will-change: opacity, transform;
+    }''')
+
+          s = s.replace(
+'''    .tagline-word {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      will-change: opacity, transform;
+      white-space: nowrap;
+    }''',
+'''    .tagline-word {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 100%;
+      opacity: 0;
+      will-change: opacity, transform;
+      white-space: nowrap;
+      text-align: center;
+    }''')
+
+          s = s.replace('.tagline-left { justify-self: end; transform: translateX(-46px); }', '.tagline-left { justify-self: end; transform: translateX(-32px); }')
+          s = s.replace('.tagline-right { justify-self: start; transform: translateX(46px); }', '.tagline-right { justify-self: start; transform: translateX(32px); }')
+          s = s.replace('      padding: 13px 18px;\n      transform: translateY(18px) scale(.78);', '      padding: 10px 14px;\n      transform: translateY(14px) scale(.86);')
+
+          # Add a tablet breakpoint so the three words still fit before switching to stacked mobile.
+          if '@media (max-width: 700px) {' not in s:
+              s = s.replace(
+'''    @media (max-width: 420px) {''',
+'''    @media (max-width: 700px) {
+      #logoLayer { width: min(94vw, 760px); }
+      #tagline {
+        width: min(92vw, 640px);
+        grid-template-columns: 1fr;
+        gap: 6px;
+        min-height: 92px;
+        font-size: clamp(.55rem, 1.85vw, .68rem);
+        line-height: 1.45;
+        letter-spacing: .12em;
+      }
+      .tagline-word { max-width: 88vw; white-space: normal; text-align: center; }
+      .tagline-left,
+      .tagline-center,
+      .tagline-right { justify-self: center; }
+      .tagline-center { padding: 8px 10px; }
+      .tagline-center::before { width: min(72vw, 230px); }
+    }
+
+    @media (max-width: 420px) {''', 1)
+
+          # Remove the duplicated mobile tagline overrides from the 420px block if present; the 700px block owns it now.
+          old_mobile = '''      #tagline {
+        grid-template-columns: 1fr;
+        gap: 4px;
+        min-height: 104px;
+        padding: 0 20px;
+        font-size: clamp(.54rem, 2.45vw, .66rem);
+        line-height: 1.45;
+        letter-spacing: .12em;
+      }
+      .tagline-word { max-width: 88vw; white-space: normal; text-align: center; }
+      .tagline-left,
+      .tagline-center,
+      .tagline-right { justify-self: center; }
+      .tagline-center { padding: 8px 10px; }
+      .tagline-center::before { width: min(72vw, 230px); }
+'''
+          s = s.replace(old_mobile, '')
+
+          s = s.replace('      const taglineSlide = state.width < 520 ? 22 : 58;', '      const taglineSlide = state.width < 700 ? 18 : 34;')
+          s = s.replace('      const creativeStartScale = state.width < 520 ? .88 : .78;', '      const creativeStartScale = state.width < 700 ? .92 : .86;')
+
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add nadi-portfolio.html
+          git diff --cached --quiet || git commit -m "Fix hero tagline centering and fit"
+          git push
