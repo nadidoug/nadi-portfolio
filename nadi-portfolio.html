@@ -601,13 +601,19 @@
       #logo { font-size: clamp(6rem, 31vw, 8rem); }
       #tagline {
         grid-template-columns: 1fr;
-        gap: 6px;
-        padding: 0 18px;
-        letter-spacing: .14em;
+        gap: 4px;
+        min-height: 104px;
+        padding: 0 20px;
+        font-size: clamp(.54rem, 2.45vw, .66rem);
+        line-height: 1.45;
+        letter-spacing: .12em;
       }
+      .tagline-word { max-width: 88vw; white-space: normal; text-align: center; }
       .tagline-left,
       .tagline-center,
       .tagline-right { justify-self: center; }
+      .tagline-center { padding: 8px 10px; }
+      .tagline-center::before { width: min(72vw, 230px); }
       .topbar { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
       .card { padding: 23px; }
       .dialog-body { padding: 30px 22px 42px; }
@@ -853,13 +859,19 @@
       return outMin + (outMax - outMin) * t;
     }
 
+    function sectionBand(value, fadeInStart, fullStart, fullEnd, fadeOutEnd) {
+      const fadeIn = mapRange(value, fadeInStart, fullStart, 0, 1);
+      const fadeOut = 1 - mapRange(value, fullEnd, fadeOutEnd, 0, 1);
+      return clamp(Math.min(fadeIn, fadeOut));
+    }
+
     const TIMELINE = {
       logoHold: [0.00, 0.15],
       logoDock: [0.15, 0.30],
       intro: [0.25, 0.45],
       projects: [0.27, 0.36],
-      skills: [0.54, 0.68],
-      automation: [0.66, 0.86],
+      skills: [0.50, 0.58, 0.64, 0.72],
+      automation: [0.62, 0.70, 0.83, 0.92],
       contact: [0.86, 1.00],
       footage: [0.00, 0.32]
     };
@@ -1052,12 +1064,14 @@
       const developerEase = 1 - Math.pow(1 - developerIn, 3);
       const systemsEase = 1 - Math.pow(1 - systemsIn, 3);
       const creativePop = 1 - Math.pow(1 - creativeIn, 4);
+      const taglineSlide = state.width < 520 ? 22 : 58;
+      const creativeStartScale = state.width < 520 ? .88 : .78;
       elements.tagDeveloper.style.opacity = developerEase * (1 - dock);
-      elements.tagDeveloper.style.transform = `translateX(${lerp(-58, 0, developerEase)}px)`;
+      elements.tagDeveloper.style.transform = `translateX(${lerp(-taglineSlide, 0, developerEase)}px)`;
       elements.tagSystems.style.opacity = systemsEase * (1 - dock);
-      elements.tagSystems.style.transform = `translateX(${lerp(58, 0, systemsEase)}px)`;
+      elements.tagSystems.style.transform = `translateX(${lerp(taglineSlide, 0, systemsEase)}px)`;
       elements.tagCreative.style.opacity = creativePop * (1 - dock);
-      elements.tagCreative.style.transform = `translateY(${lerp(18, 0, creativePop)}px) scale(${lerp(.78, 1, creativePop)})`;
+      elements.tagCreative.style.transform = `translateY(${lerp(14, 0, creativePop)}px) scale(${lerp(creativeStartScale, 1, creativePop)})`;
       elements.tagCreative.style.setProperty("--line-scale", creativePop);
 
       const intro = mapRange(progress, ...TIMELINE.intro, 0, 1);
@@ -1071,13 +1085,19 @@
         card.style.transform = `translateY(${lerp(24, 0, cardEase)}px)`;
       });
 
-      const skills = mapRange(progress, ...TIMELINE.skills, 0, 1);
+      const skills = sectionBand(progress, ...TIMELINE.skills);
+      const skillsIn = mapRange(progress, TIMELINE.skills[0], TIMELINE.skills[1], 0, 1);
+      const skillsOut = mapRange(progress, TIMELINE.skills[2], TIMELINE.skills[3], 0, 1);
+      const skillsY = skillsOut > 0 ? lerp(0, -34, skillsOut) : lerp(42, 0, skillsIn);
       elements.skills.style.opacity = skills;
-      elements.skills.style.transform = `translateY(${lerp(60, 0, skills)}px)`;
+      elements.skills.style.transform = `translateY(${skillsY}px)`;
 
-      const automation = mapRange(progress, ...TIMELINE.automation, 0, 1);
+      const automation = sectionBand(progress, ...TIMELINE.automation);
+      const automationIn = mapRange(progress, TIMELINE.automation[0], TIMELINE.automation[1], 0, 1);
+      const automationOut = mapRange(progress, TIMELINE.automation[2], TIMELINE.automation[3], 0, 1);
+      const automationY = automationOut > 0 ? lerp(0, -38, automationOut) : lerp(48, 0, automationIn);
       elements.automation.style.opacity = automation;
-      elements.automation.style.transform = `translateY(${lerp(64, 0, automation)}px)`;
+      elements.automation.style.transform = `translateY(${automationY}px)`;
 
       elements.workflowSteps.forEach((step, index) => {
         const stepIn = mapRange(progress, TIMELINE.automation[0] + .035 + index * .012, TIMELINE.automation[0] + .105 + index * .012, 0, 1);
@@ -1092,7 +1112,7 @@
       });
 
       elements.automationStats.forEach((stat, index) => {
-        const statIn = mapRange(progress, TIMELINE.automation[1] - .09 + index * .016, TIMELINE.automation[1] - .01 + index * .016, 0, 1);
+        const statIn = mapRange(progress, TIMELINE.automation[2] - .055 + index * .014, TIMELINE.automation[2] + .018 + index * .014, 0, 1);
         const statEase = 1 - Math.pow(1 - statIn, 2.2);
         stat.style.opacity = statEase;
         stat.style.transform = `translateY(${lerp(26, 0, statEase)}px)`;
