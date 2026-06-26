@@ -69,6 +69,20 @@ Deno.serve(async (req: Request) => {
 
     if (subscriberError) return json({ error: subscriberError.message }, 500);
 
+    const { data: existingWelcome, error: existingWelcomeError } = await supabase
+      .from("email_queue")
+      .select("id,status")
+      .eq("to_email", email)
+      .eq("template_slug", "welcome")
+      .in("status", ["queued", "processing", "sent"])
+      .limit(1)
+      .maybeSingle();
+
+    if (existingWelcomeError) return json({ error: existingWelcomeError.message }, 500);
+    if (existingWelcome) {
+      return json({ success: true, message: "Already subscribed" });
+    }
+
     const { error: queueError } = await supabase.from("email_queue").insert({
       template_slug: "welcome",
       subscriber_id: subscriber?.id || null,

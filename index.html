@@ -1230,6 +1230,7 @@
     const subscribeStatus = document.querySelector("#subscribeStatus");
     const SUBSCRIBE_ENDPOINT = "https://yattojbkdupvahegedzv.supabase.co/functions/v1/portfolio-submit";
     let subscribeAutoShown = false;
+    let subscribeSubmitting = false;
 
     function setSubscribePanel(open, dismissed = false, focusField = false) {
       subscribePanel.classList.toggle("open", open);
@@ -1253,7 +1254,9 @@
     subscribeClose.addEventListener("click", () => setSubscribePanel(false, true));
     subscribeForm.addEventListener("submit", async event => {
       event.preventDefault();
+      if (subscribeSubmitting) return;
       if (!subscribeForm.reportValidity()) return;
+      subscribeSubmitting = true;
       const submitButton = subscribeForm.querySelector(".subscribe-submit");
       const originalText = submitButton.textContent;
       subscribeStatus.textContent = "Adding you to the list...";
@@ -1277,6 +1280,7 @@
       } catch (error) {
         subscribeStatus.textContent = "Something did not send. Try again or email nadi@nadidoug.com.";
       } finally {
+        subscribeSubmitting = false;
         submitButton.disabled = false;
         submitButton.textContent = originalText;
       }
