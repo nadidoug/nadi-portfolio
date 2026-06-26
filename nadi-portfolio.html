@@ -343,6 +343,15 @@
       color: rgba(242, 239, 232, .8);
       font: 400 clamp(.7rem, 1vw, .8rem)/1 var(--mono);
       letter-spacing: .04em;
+      opacity: 0;
+      transform: translate3d(0, 28px, 0) scale(.94);
+      will-change: opacity, transform, border-color, box-shadow;
+      transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+    .skill:hover {
+      border-color: rgba(255, 107, 43, .72);
+      background: rgba(255, 107, 43, .1);
+      box-shadow: 0 0 26px rgba(255, 107, 43, .16);
     }
 
     .automation-wrap { width: min(1180px, 100%); }
@@ -671,7 +680,7 @@
     @media (prefers-reduced-motion: reduce) {
       .grain { animation: none; }
       .scroll-cue { display: none; }
-      .statement, .card, #skills .inner, #automation .inner, #contact .inner, .workflow-step, .automation-stat { opacity: 1 !important; transform: none !important; }
+      .statement, .card, #skills .inner, #automation .inner, #contact .inner, .skill, .workflow-step, .automation-stat { opacity: 1 !important; transform: none !important; }
       .workflow-connector { opacity: 1 !important; --connector-glow: 1 !important; }
     }
   </style>
@@ -929,6 +938,7 @@
       intro: document.querySelector("#introText"),
       cards: [...document.querySelectorAll(".card")],
       skills: document.querySelector("#skills .inner"),
+      skillItems: [...document.querySelectorAll(".skill")],
       automation: document.querySelector("#automation .inner"),
       workflowSteps: [...document.querySelectorAll(".workflow-step")],
       workflowConnectors: [...document.querySelectorAll(".workflow-connector")],
@@ -1132,6 +1142,17 @@
       const skillsY = skillsOut > 0 ? lerp(0, -48, skillsOut) : lerp(74, 0, skillsIn);
       elements.skills.style.opacity = skills * .85;
       elements.skills.style.transform = `translateY(${skillsY}px)`;
+      elements.skillItems.forEach((skill, index) => {
+        const itemIn = mapRange(progress, TIMELINE.skills[0] + index * .007, TIMELINE.skills[1] + index * .007, 0, 1);
+        const itemOut = mapRange(progress, TIMELINE.skills[2] + index * .004, TIMELINE.skills[3] + index * .004, 0, 1);
+        const itemVisible = Math.min(itemIn, 1 - itemOut);
+        const itemEase = 1 - Math.pow(1 - itemIn, 2.5);
+        const wave = Math.sin((progress * 44) + index * .75) * 4 * itemVisible;
+        const drift = itemOut > 0 ? lerp(0, -22, itemOut) : lerp(34 + (index % 3) * 8, 0, itemEase);
+        const scale = lerp(.92, 1, itemEase) - itemOut * .04;
+        skill.style.opacity = Math.max(0, itemVisible);
+        skill.style.transform = `translate3d(0, ${drift + wave}px, 0) scale(${scale})`;
+      });
 
       const automation = sectionBand(progress, ...TIMELINE.automation);
       const automationIn = mapRange(progress, TIMELINE.automation[0], TIMELINE.automation[1], 0, 1);
