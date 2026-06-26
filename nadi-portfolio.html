@@ -899,9 +899,9 @@
       logoDock: [0.15, 0.30],
       intro: [0.25, 0.45],
       projects: [0.27, 0.36],
-      skills: [0.42, 0.445, 0.53, 0.61],
-      automation: [0.56, 0.63, 0.76, 0.85],
-      contact: [0.80, 0.94],
+      skills: [0.50, 0.58, 0.615, 0.69],
+      automation: [0.66, 0.72, 0.82, 0.89],
+      contact: [0.84, 0.96],
       footage: [0.00, 0.32]
     };
 
@@ -909,9 +909,9 @@
       { start: 0.00, label: "Hero / 01" },
       { start: 0.25, label: "About / 02" },
       { start: 0.31, label: "Projects / 03" },
-      { start: 0.445, label: "Skills / 04" },
-      { start: 0.63, label: "Automation / 05" },
-      { start: 0.82, label: "Contact / 06" }
+      { start: 0.58, label: "Skills / 04" },
+      { start: 0.72, label: "Automation / 05" },
+      { start: 0.84, label: "Contact / 06" }
     ];
 
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1129,8 +1129,8 @@
       const skills = sectionBand(progress, ...TIMELINE.skills);
       const skillsIn = mapRange(progress, TIMELINE.skills[0], TIMELINE.skills[1], 0, 1);
       const skillsOut = mapRange(progress, TIMELINE.skills[2], TIMELINE.skills[3], 0, 1);
-      const skillsY = skillsOut > 0 ? lerp(0, -34, skillsOut) : lerp(42, 0, skillsIn);
-      elements.skills.style.opacity = skills;
+      const skillsY = skillsOut > 0 ? lerp(0, -48, skillsOut) : lerp(74, 0, skillsIn);
+      elements.skills.style.opacity = skills * .85;
       elements.skills.style.transform = `translateY(${skillsY}px)`;
 
       const automation = sectionBand(progress, ...TIMELINE.automation);
