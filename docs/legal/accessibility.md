@@ -1,6 +1,6 @@
 # Accessibility Statement
 
-**Last updated:** [DATE]
+**Last updated:** July 2, 2026
 
 Nadir Douglas / SITSOL is committed to making nadidoug.com and hosted projects accessible to the widest possible audience.
 

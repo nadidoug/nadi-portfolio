@@ -1,41 +1,45 @@
 # Privacy Policy
 
-**Effective date:** [DATE] · **Applies to:** nadidoug.com, hosted project demos, and this repository's associated services ("Services"), operated by Nadir Douglas / SITSOL, Maryland, USA.
+**Effective date:** July 2, 2026
 
-## 1. What We Collect
+**Applies to:** nadidoug.com and the portfolio website operated by Nadir Douglas / SITSOL in Maryland, USA.
 
-- **Contact data** you send voluntarily (name, email, message content) via contact forms or email.
-- **Usage data** collected automatically: IP address, browser type, pages visited, referrer — via [ANALYTICS PROVIDER, e.g., Plausible/GA4].
-- **Cookies** as described in the [Cookie Policy](cookie-policy.md).
-- **AI feature inputs**: text you submit to AI-powered demos may be processed by third-party AI providers (see [AI Disclosure](ai-disclosure.md)). Do not submit sensitive personal information to demos.
+## Information collected
 
-We do **not** knowingly collect data from children under 13, and we do not sell personal information.
+The website collects only information visitors choose to provide:
 
-## 2. How We Use It
+- **Email signup:** name, email address, consent status, signup source, and signup time.
+- **Direct contact:** information included in an email sent to nadi@nadidoug.com.
+- **Basic service data:** limited technical logs that hosting, database, and email providers may process to operate and secure their services.
 
-To respond to inquiries, operate and improve the Services, monitor security, and comply with legal obligations. We do not use your contact data for marketing without consent.
+The website does not knowingly collect information from children under 13 and does not sell or rent personal information.
 
-## 3. Sharing
+## How information is used
 
-Shared only with: service providers (hosting, analytics, email, AI APIs) under their own privacy terms; or when required by law. Never sold.
+Signup information is used to maintain the mailing list, send requested updates and welcome messages, prevent duplicate subscriptions, process unsubscribes, and protect the service from abuse. Contact information is used to answer inquiries.
 
-## 4. Data Retention
+## Service providers
 
-| Data | Retention |
-|---|---|
-| Contact inquiries | 24 months after last contact, then deleted |
-| Server/analytics logs | [90] days |
-| AI demo inputs | Not stored by us; provider retention per their policy |
-| Client project data (SITSOL) | Per client agreement |
+The website uses service providers only as needed to operate its features:
 
-## 5. Your Rights
+- **GitHub Pages** hosts the public website.
+- **Supabase** stores subscriber records and processes signup and unsubscribe requests.
+- **Resend** delivers subscribed email messages.
 
-You may request access, correction, or deletion of your personal data by emailing **nadi@nadidoug.com**. California and EU/UK visitors may have additional rights (CCPA/GDPR) `[ATTORNEY REVIEW: confirm applicability thresholds — likely below CCPA thresholds as a solo operation]`.
+These providers process data under their own terms and privacy policies. Information may also be disclosed when required by law or necessary to protect the website and its users.
 
-## 6. Security
+## Email choices
 
-Reasonable technical measures are used (HTTPS, access controls, secrets management per our [engineering standards](../engineering/secrets-management.md)). No method is 100% secure.
+Marketing email is sent only after a visitor actively checks the consent box and submits the signup form. Every campaign email includes an unsubscribe link. An unsubscribe request stops future campaign email, although a minimal suppression record may be retained so the preference can be honored.
 
-## 7. Changes & Contact
+## Browser storage and cookies
 
-Material changes will be posted here with a new effective date. Questions: **nadi@nadidoug.com**.
+The website uses browser session storage to remember whether the signup panel was dismissed during the current browsing session. It does not currently use advertising cookies or cross-site tracking. See the [Cookie and Browser Storage Policy](cookie-policy.md).
+
+## Retention and security
+
+Subscriber information is retained while a person remains subscribed and as reasonably necessary to document consent, honor an unsubscribe request, maintain security, and meet legal obligations. Reasonable safeguards are used, but no internet service can guarantee absolute security.
+
+## Your choices and contact
+
+You may request access, correction, or deletion of personal information, or withdraw consent, by emailing **nadi@nadidoug.com**. Material updates to this policy will be posted with a revised effective date.

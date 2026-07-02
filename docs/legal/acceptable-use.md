@@ -1,14 +1,16 @@
-# Acceptable Use Policy
+# Website Acceptable Use Policy
 
-Applies to nadidoug.com, hosted demos, and any SITSOL-operated service.
+**Effective date:** July 2, 2026
 
-You may **not** use the Services to:
+This policy applies to the Nadi portfolio website, its forms, and its hosted demonstrations.
 
-- Violate any law or third-party right (including IP and privacy rights).
-- Probe, scan, or attack the Services outside the [responsible disclosure process](../../SECURITY.md).
-- Scrape at abusive rates, evade rate limits, or resell access.
-- Submit malware, or content that is unlawful, harassing, or infringing.
-- Abuse AI-powered demos: attempts to extract system prompts for misuse, generate unlawful content, or use demo AI output in production systems.
-- Misrepresent affiliation with Nadir Douglas or SITSOL.
+Visitors may not:
 
-Violations may result in immediate access revocation and, where appropriate, referral to authorities. Report abuse to **nadi@nadidoug.com**.
+- Violate applicable law or another person's intellectual-property, privacy, or other rights.
+- Attempt unauthorized access to the Website, Supabase functions, subscriber data, or connected services.
+- Probe, scan, overload, disrupt, scrape abusively, evade rate limits, or bypass security controls.
+- Submit malware, deceptive requests, unlawful material, or information they are not authorized to provide.
+- Abuse signup or contact features to send spam or impersonate another person.
+- Misrepresent an affiliation with Nadir Douglas or SITSOL.
+
+Access may be restricted when necessary to protect the Website, its service providers, and visitors. Report abuse or security concerns to **nadi@nadidoug.com**.

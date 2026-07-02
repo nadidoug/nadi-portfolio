@@ -1,17 +1,15 @@
-# Cookie Policy
+# Cookie and Browser Storage Policy
 
-**Effective date:** [DATE]
+**Effective date:** July 2, 2026
 
-nadidoug.com uses a minimal cookie footprint.
+The Nadi portfolio website currently uses a minimal amount of browser storage.
 
-| Cookie / Storage | Type | Purpose | Duration |
-|---|---|---|---|
-| [session cookie] | Essential | Site functionality | Session |
-| [analytics] | Analytics | Anonymous usage statistics via [PROVIDER] | [13 months] |
-| localStorage (demos) | Functional | Save demo progress locally on your device | Until cleared |
+| Technology | Purpose | Duration |
+|---|---|---|
+| Session storage | Remembers whether the email signup panel was dismissed | Until the browser tab or session is closed |
 
-- **Essential cookies** cannot be disabled; the site won't function without them.
-- **Analytics**: [If using Plausible/self-hosted: "Our analytics are cookieless and collect no personal data." / If GA4: consent banner required for EU visitors — `[ATTORNEY REVIEW]`.]
-- **Managing cookies:** You can block or delete cookies in your browser settings; demo features relying on localStorage may stop working.
+The Website does not currently use advertising cookies, cross-site tracking cookies, or an analytics cookie. Hosting and security providers may process basic request information needed to deliver and protect the Website.
 
-We do not use advertising or cross-site tracking cookies. Questions: **nadi@nadidoug.com**.
+You can clear or block browser storage through your browser settings. Doing so may cause the signup panel to appear again during a later visit.
+
+Questions: **nadi@nadidoug.com**

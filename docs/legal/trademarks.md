@@ -1,6 +1,6 @@
 # Trademark Policy
 
-**Last updated:** [DATE]
+**Last updated:** July 2, 2026
 
 1. **Marks.** "SITSOL", "Structurally Intelligent Thinking Solutions", the SITSOL logo, and associated product names (e.g., [PRODUCT NAMES]) are trademarks of Nadir Douglas / SITSOL `[Note: common-law marks unless/until federally registered — ATTORNEY REVIEW for USPTO filing before SaaS launch]`.
 2. **Permitted use.** You may reference the marks in plain text to truthfully refer to this portfolio or SITSOL's services (nominative fair use).

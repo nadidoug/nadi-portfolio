@@ -3,9 +3,9 @@
 | Document | Purpose |
 |---|---|
 | [Privacy Policy](privacy.md) | How personal data is handled (incl. retention) |
-| [Terms of Use](terms.md) | Rules for using nadidoug.com and hosted demos |
-| [Acceptable Use Policy](acceptable-use.md) | Prohibited uses of hosted services |
-| [Cookie Policy](cookie-policy.md) | Cookies and tracking disclosure |
+| [Website Terms of Use](terms.md) | Rules for using nadidoug.com and hosted demos |
+| [Website Acceptable Use Policy](acceptable-use.md) | Prohibited uses of website features |
+| [Cookie and Browser Storage Policy](cookie-policy.md) | Browser storage and tracking disclosure |
 | [Disclaimer](disclaimer.md) | General warranty/liability disclaimer |
 | [Portfolio Disclaimer](portfolio-disclaimer.md) | Client work, NDAs, and representation limits |
 | [Accessibility Statement](accessibility.md) | WCAG 2.2 conformance commitment |
@@ -14,6 +14,6 @@
 | [Copyright Notice](copyright.md) | Ownership and DMCA process |
 | [Trademark Policy](trademarks.md) | SITSOL name/brand usage |
 | [Third-Party Notices](third-party-notices.md) | Dependency attributions |
-| [Export Compliance](export-compliance.md) | U.S. export notice |
+| [International Access Notice](export-compliance.md) | Notice for visitors outside the United States |
 
-> These documents are self-drafted templates, not legal advice. Items marked `[ATTORNEY REVIEW]` should be reviewed by licensed counsel before any commercial/SaaS launch.
+> These documents describe the public portfolio website and its connected signup services. They are general disclosures, not legal advice.

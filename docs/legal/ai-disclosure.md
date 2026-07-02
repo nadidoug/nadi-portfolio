@@ -1,6 +1,6 @@
 # AI Disclosure
 
-**Last updated:** [DATE]
+**Last updated:** July 2, 2026
 
 Transparency about where and how artificial intelligence is used across this portfolio and SITSOL projects.
 

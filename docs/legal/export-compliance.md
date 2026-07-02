@@ -1,8 +1,9 @@
-# Export Compliance Notice
+# International Access Notice
 
-**Last updated:** [DATE]
+**Last updated:** July 2, 2026
 
-1. This repository is published from the United States and may be subject to U.S. export laws, including the Export Administration Regulations (EAR).
-2. **Public source code.** Publicly available source code on GitHub is generally not subject to the EAR (15 C.F.R. § 734.3(b)(3)), except certain encryption software. Projects here use only **standard, published encryption** (TLS, bcrypt/argon2, platform crypto libraries), which typically qualifies for License Exception TSU / mass-market treatment. `[ATTORNEY REVIEW if custom cryptography is ever added]`
-3. **Prohibited destinations.** You may not download or use these materials in violation of U.S. sanctions — including in embargoed regions or by denied parties (OFAC SDN list).
-4. **Future SaaS.** Commercial SaaS offerings will carry their own export terms; this notice covers the public repository only.
+The Nadi portfolio website is operated from the United States and may be viewed from other countries. Visitors are responsible for complying with laws that apply where they access the Website.
+
+The Website is not intended to provide controlled technical data, sanctioned-party services, or regulated export transactions. Links to public software projects and demonstrations are provided for portfolio and evaluation purposes. Availability in a country does not represent a promise that every feature or service can be offered there.
+
+Questions: **nadi@nadidoug.com**
