@@ -1,7 +1,25 @@
 .codex-tools/
 .supabase-tools/
 .supabase/
+
+# Secrets & environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dependencies & builds
+node_modules/
+dist/
+build/
+target/
+.next/
+coverage/
+
+# OS / editor
 *.log
 .DS_Store
 Thumbs.db
-
+.idea/
+.vscode/

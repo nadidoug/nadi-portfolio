@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/nadidoug/nadi-portfolio/security/advisories/new
+    about: Please report security issues privately — never as public issues.
+  - name: Business / hiring inquiry
+    url: https://nadidoug.com
+    about: Contact via the portfolio site for consulting or hiring.

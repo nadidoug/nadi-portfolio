@@ -1,0 +1,35 @@
+PORTFOLIO SOURCE-AVAILABLE LICENSE
+Copyright (c) 2026 Nadir Douglas ("Author")
+All Rights Reserved.
+
+NOTICE: This is not an open-source license.
+
+1. PURPOSE. The source code, documentation, designs, and other materials
+   in this repository (the "Materials") are published solely to allow
+   prospective employers, clients, and collaborators to review the
+   Author's work ("Portfolio Review").
+
+2. PERMITTED USE. You may view, clone, and locally run the Materials
+   for Portfolio Review purposes only.
+
+3. PROHIBITED USE. Except as permitted by Section 2 or by applicable
+   law, you may NOT: (a) copy, modify, or create derivative works of
+   the Materials; (b) redistribute, sublicense, sell, or host the
+   Materials; (c) use the Materials, in whole or in part, in any
+   commercial or production system; (d) use the Materials to train
+   machine-learning models; or (e) remove copyright or attribution
+   notices.
+
+4. THIRD-PARTY COMPONENTS. Third-party dependencies remain governed by
+   their own licenses. See docs/legal/third-party-notices.md.
+
+5. NO WARRANTY. THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF
+   ANY KIND, EXPRESS OR IMPLIED. IN NO EVENT SHALL THE AUTHOR BE LIABLE
+   FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE
+   MATERIALS OR THEIR USE.
+
+6. LICENSING INQUIRIES. To license any component for commercial use,
+   contact: [YOUR-EMAIL].
+
+Individual projects within this portfolio may carry their own LICENSE
+file; where present, that file governs that project.

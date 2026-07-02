@@ -53,3 +53,14 @@ Then visit `http://127.0.0.1:4174/`.
 - [GuapClock](https://github.com/nadidoug/guapclock)
 - Email Campaign System with Supabase + Resend
 - [Websites Like This](https://github.com/nadidoug/nadi-portfolio)
+
+## Repository policies
+
+- [Repository setup](docs/REPO-SETUP.md)
+- [Engineering standards](docs/engineering/README.md)
+- [Legal and compliance](docs/legal/README.md)
+- [Security policy](SECURITY.md)
+- [Contributing guide](CONTRIBUTING.md)
+- [Support](SUPPORT.md)
+
+This portfolio is published for review purposes. See [LICENSE](LICENSE) for usage terms.

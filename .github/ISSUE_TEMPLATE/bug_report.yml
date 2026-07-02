@@ -1,0 +1,29 @@
+name: Bug report
+description: Something isn't working in a portfolio project
+labels: ["bug"]
+body:
+  - type: input
+    id: project
+    attributes:
+      label: Project
+      placeholder: e.g., 3D storefront demo
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: 1. Go to… 2. Click… 3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual behavior
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: OS, browser/runtime, version
