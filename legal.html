@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08090b">
+  <meta name="description" content="Privacy, terms, accessibility, and website policies for nadidoug.com.">
+  <title>Website Policies — Nadi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #08090b;
+      --paper: #f2efe8;
+      --muted: #a8a49b;
+      --line: rgba(242, 239, 232, .16);
+      --orange: #ff6b2b;
+      --blue: #587cff;
+      --display: "Oswald", "Arial Narrow", sans-serif;
+      --sans: "Manrope", Arial, sans-serif;
+      --mono: "DM Mono", monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--ink); }
+    body {
+      min-width: 320px;
+      color: var(--paper);
+      background:
+        radial-gradient(circle at 85% 12%, rgba(88, 124, 255, .14), transparent 34rem),
+        radial-gradient(circle at 8% 38%, rgba(255, 107, 43, .12), transparent 30rem),
+        var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    a:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+    .topbar {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px clamp(20px, 5vw, 72px);
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 9, 11, .82);
+      backdrop-filter: blur(18px);
+    }
+    .brand { font: 600 1.15rem/1 var(--display); letter-spacing: .13em; text-decoration: none; }
+    .back { color: var(--muted); font: 400 10px/1 var(--mono); letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
+    .back:hover { color: var(--orange); }
+    main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: clamp(72px, 10vw, 140px) 0 90px; }
+    .eyebrow { color: var(--orange); font: 500 10px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; }
+    h1 { max-width: 820px; margin-top: 18px; font: 600 clamp(3.5rem, 10vw, 8rem)/.84 var(--display); letter-spacing: -.035em; text-transform: uppercase; }
+    .intro { max-width: 670px; margin-top: 26px; color: var(--muted); font-size: clamp(.94rem, 1.5vw, 1.08rem); line-height: 1.75; }
+    .policy-nav { display: flex; flex-wrap: wrap; gap: 9px; margin: 38px 0 70px; }
+    .policy-nav a {
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font: 400 9px/1 var(--mono);
+      letter-spacing: .11em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: .25s ease;
+    }
+    .policy-nav a:hover { color: var(--paper); border-color: var(--orange); background: rgba(255, 107, 43, .08); }
+    .policy {
+      display: grid;
+      grid-template-columns: minmax(180px, .34fr) minmax(0, 1fr);
+      gap: clamp(30px, 7vw, 100px);
+      padding: 64px 0;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 76px;
+    }
+    .policy h2 { font: 600 clamp(2rem, 4.5vw, 4rem)/.95 var(--display); text-transform: uppercase; }
+    .policy-copy { color: #d2cec5; font-size: .92rem; line-height: 1.75; }
+    .policy-copy h3 { margin: 30px 0 8px; color: var(--paper); font: 500 1rem/1.3 var(--sans); }
+    .policy-copy h3:first-child { margin-top: 0; }
+    .policy-copy p + p, .policy-copy ul + p { margin-top: 14px; }
+    .policy-copy ul { margin: 10px 0 0 20px; }
+    .policy-copy li + li { margin-top: 6px; }
+    .policy-copy strong { color: var(--paper); }
+    .effective { display: block; margin-top: 12px; color: var(--muted); font: 400 9px/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+    footer { padding: 28px clamp(20px, 5vw, 72px); border-top: 1px solid var(--line); color: var(--muted); font: 400 9px/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    @media (max-width: 700px) {
+      main { width: min(100% - 32px, 1120px); padding-top: 64px; }
+      .policy { grid-template-columns: 1fr; gap: 24px; padding: 48px 0; }
+      .policy-nav { margin-bottom: 48px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">NADI</a>
+    <a class="back" href="index.html#contact">← Back to portfolio</a>
+  </header>
+
+  <main>
+    <p class="eyebrow">Website policies</p>
+    <h1>Clear terms.<br>Plain language.</h1>
+    <p class="intro">These policies explain how the Nadi portfolio website works, what happens when you join the email list, and the choices you have. Questions can be sent to <a href="mailto:nadi@nadidoug.com">nadi@nadidoug.com</a>.</p>
+
+    <nav class="policy-nav" aria-label="Policy sections">
+      <a href="#privacy">Privacy</a>
+      <a href="#terms">Terms</a>
+      <a href="#cookies">Cookies</a>
+      <a href="#acceptable-use">Acceptable use</a>
+      <a href="#accessibility">Accessibility</a>
+      <a href="#disclaimer">Disclaimer</a>
+    </nav>
+
+    <section class="policy" id="privacy">
+      <div><h2>Privacy</h2><span class="effective">Effective July 2, 2026</span></div>
+      <div class="policy-copy">
+        <h3>What is collected</h3>
+        <p>When you join the email list, the site collects the name and email address you provide, your consent, signup source, and signup time. If you email directly, the information in that message is received. Hosting and security providers may also process limited technical logs needed to operate their services.</p>
+        <h3>How it is used</h3>
+        <p>Signup information is used to maintain the mailing list, send requested updates and welcome messages, prevent duplicate subscriptions, process unsubscribes, and protect the service from abuse. Personal information is not sold or rented.</p>
+        <h3>Service providers</h3>
+        <ul><li><strong>GitHub Pages</strong> hosts the public website.</li><li><strong>Supabase</strong> stores subscriber records and processes signup and unsubscribe requests.</li><li><strong>Resend</strong> delivers subscribed email messages.</li></ul>
+        <h3>Your choices</h3>
+        <p>Email signup requires active consent. Every campaign email includes an unsubscribe link. You may request access, correction, or deletion by emailing <a href="mailto:nadi@nadidoug.com">nadi@nadidoug.com</a>. A minimal suppression record may be retained after unsubscribing so that choice can be honored.</p>
+      </div>
+    </section>
+
+    <section class="policy" id="terms">
+      <div><h2>Terms</h2><span class="effective">Effective July 2, 2026</span></div>
+      <div class="policy-copy">
+        <p>By using nadidoug.com, you agree to these terms. The site presents professional experience, creative work, software projects, and demonstrations for information and evaluation.</p>
+        <h3>Ownership and use</h3><p>Unless otherwise identified, the site's design, text, media, and original project materials belong to Nadir Douglas or their licensors. Viewing the site does not grant permission to copy, sell, republish, or create derivative work.</p>
+        <h3>Submissions and subscriptions</h3><p>Information submitted through forms must be lawful and yours to provide. Subscription is voluntary and can be ended at any time through an email's unsubscribe link.</p>
+        <h3>Availability and outside services</h3><p>Projects, links, and demonstrations may change or be removed without notice. Third-party services and links operate under their own terms. Continuous, error-free availability is not guaranteed.</p>
+        <h3>Governing law</h3><p>These terms are governed by Maryland law. Updated terms become effective when posted with a revised date.</p>
+      </div>
+    </section>
+
+    <section class="policy" id="cookies">
+      <div><h2>Cookies</h2><span class="effective">Minimal storage</span></div>
+      <div class="policy-copy">
+        <p>The site uses browser session storage to remember whether the email signup panel was dismissed. That preference lasts only for the current browsing session.</p>
+        <p>The site does not currently use advertising cookies, cross-site tracking cookies, or an analytics cookie. You can clear or block browser storage in browser settings; doing so may cause the signup panel to appear again.</p>
+      </div>
+    </section>
+
+    <section class="policy" id="acceptable-use">
+      <div><h2>Acceptable use</h2></div>
+      <div class="policy-copy">
+        <p>Do not attempt unauthorized access, disrupt the site or connected services, evade safeguards, submit malware or deceptive requests, abuse signup features, violate another person's rights, or misrepresent an affiliation with Nadir Douglas or SITSOL.</p>
+        <p>Access may be restricted when necessary to protect the site, its providers, and visitors. Report security concerns privately to <a href="mailto:nadi@nadidoug.com">nadi@nadidoug.com</a>.</p>
+      </div>
+    </section>
+
+    <section class="policy" id="accessibility">
+      <div><h2>Accessibility</h2></div>
+      <div class="policy-copy">
+        <p>The goal is an inclusive experience that supports keyboard navigation, visible focus states, responsive layouts, semantic structure, reduced-motion preferences, and readable contrast.</p>
+        <p>If you encounter an accessibility barrier, email <a href="mailto:nadi@nadidoug.com">nadi@nadidoug.com</a> with the page and a description of the issue.</p>
+      </div>
+    </section>
+
+    <section class="policy" id="disclaimer">
+      <div><h2>Disclaimer</h2></div>
+      <div class="policy-copy">
+        <p>The site, projects, links, and demonstrations are provided <strong>as is</strong> and <strong>as available</strong>. Project descriptions are informational and do not guarantee identical results for another project or business.</p>
+        <p>Nothing on the site is legal, financial, security, employment, or other professional advice. External links do not imply control or endorsement. To the maximum extent permitted by law, Nadir Douglas and SITSOL are not liable for indirect, incidental, special, consequential, or punitive damages arising from use of the site.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>Nadi © 2026 · Website policies · nadi@nadidoug.com</footer>
+</body>
+</html>
