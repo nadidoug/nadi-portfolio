@@ -97,3 +97,5 @@ jobs:
           git add index.html nadi-portfolio.html join.html legal.html nadi-douglas-resume.html .github/workflows/apply-legal-footer.yml
           git diff --cached --quiet || git commit -m "Add legal footer links"
           git push origin HEAD:agent/legal-footer
+
+# Triggered by ChatGPT GitHub integration
