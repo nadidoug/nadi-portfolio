@@ -1,0 +1,59 @@
+name: Increase Hero Tagline Size
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/increase-hero-tagline-size.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Increase homepage hero tagline readability
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          files = [Path('index.html'), Path('nadi-portfolio.html')]
+          replacements = [
+              (
+                  '      font: 400 clamp(.66rem, 1.2vw, .84rem)/1.7 var(--mono);\n      letter-spacing: .2em;',
+                  '      font: 500 clamp(.82rem, 1.4vw, 1.1rem)/1.55 var(--mono);\n      letter-spacing: .14em;'
+              ),
+              (
+                  '        font-size: clamp(.52rem, 2.25vw, .66rem);',
+                  '        font-size: clamp(.82rem, 3.4vw, 1rem);'
+              ),
+              (
+                  '        font-size: clamp(.5rem, 2.35vw, .62rem);',
+                  '        font-size: clamp(.78rem, 3.6vw, .95rem);'
+              ),
+          ]
+
+          for path in files:
+              text = path.read_text(encoding='utf-8')
+              for old, new in replacements:
+                  if new in text:
+                      continue
+                  if old not in text:
+                      raise SystemExit(f'Expected tagline style not found in {path}: {old}')
+                  text = text.replace(old, new, 1)
+              path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit tagline size update
+        run: |
+          rm .github/workflows/increase-hero-tagline-size.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html nadi-portfolio.html .github/workflows/increase-hero-tagline-size.yml
+          git diff --cached --quiet || git commit -m "Increase hero tagline font size"
+          git push origin HEAD:main
