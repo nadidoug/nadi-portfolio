@@ -99,3 +99,4 @@ jobs:
           git push origin HEAD:main
 
 # Run once on main and remove itself
+# Triggered through merge
