@@ -1,0 +1,172 @@
+/* ============================================================
+   policy.css — shared stylesheet for standalone policy pages
+   (policies/privacy.html, terms.html, accessibility.html,
+   disclaimer.html). Design tokens match index.html / legal.html.
+   Edit here once; all four pages update.
+   ============================================================ */
+
+:root {
+  --ink: #08090b;
+  --paper: #f2efe8;
+  --muted: #a8a49b;
+  --line: rgba(242, 239, 232, .16);
+  --orange: #ff6b2b;
+  --blue: #587cff;
+  --display: "Oswald", "Arial Narrow", sans-serif;
+  --sans: "Manrope", Arial, sans-serif;
+  --mono: "DM Mono", monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; background: var(--ink); }
+
+body {
+  min-width: 320px;
+  color: var(--paper);
+  background:
+    radial-gradient(circle at 85% 12%, rgba(88, 124, 255, .14), transparent 34rem),
+    radial-gradient(circle at 8% 38%, rgba(255, 107, 43, .12), transparent 30rem),
+    var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+a:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--orange);
+  color: var(--ink);
+  font: 500 12px/1 var(--mono);
+  text-decoration: none;
+}
+.skip-link:focus { left: 16px; top: 16px; }
+
+/* ---------- Top bar ---------- */
+.topbar {
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px clamp(20px, 5vw, 72px);
+  border-bottom: 1px solid var(--line);
+  background: rgba(8, 9, 11, .82);
+  backdrop-filter: blur(18px);
+}
+.brand { font: 600 1.15rem/1 var(--display); letter-spacing: .13em; text-decoration: none; }
+.back {
+  color: var(--muted);
+  font: 400 10px/1 var(--mono);
+  letter-spacing: .12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.back:hover { color: var(--orange); }
+
+/* ---------- Main ---------- */
+main {
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: clamp(64px, 9vw, 120px) 0 90px;
+}
+.eyebrow {
+  color: var(--orange);
+  font: 500 10px/1 var(--mono);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+h1 {
+  max-width: 900px;
+  margin-top: 18px;
+  font: 600 clamp(2.9rem, 8.5vw, 6.5rem)/.88 var(--display);
+  letter-spacing: -.03em;
+  text-transform: uppercase;
+}
+.dates {
+  display: block;
+  margin-top: 16px;
+  color: var(--muted);
+  font: 400 9px/1.6 var(--mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* Pill nav between policy pages */
+.policy-nav { display: flex; flex-wrap: wrap; gap: 9px; margin: 34px 0 58px; }
+.policy-nav a {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font: 400 9px/1 var(--mono);
+  letter-spacing: .11em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: .25s ease;
+}
+.policy-nav a:hover { color: var(--paper); border-color: var(--orange); background: rgba(255, 107, 43, .08); }
+.policy-nav a[aria-current="page"] {
+  color: var(--ink);
+  border-color: var(--orange);
+  background: var(--orange);
+}
+
+/* ---------- Article body ---------- */
+.policy-copy {
+  max-width: 780px;
+  color: #d2cec5;
+  font-size: .95rem;
+  line-height: 1.78;
+}
+.policy-copy h2 {
+  margin: 44px 0 12px;
+  padding-top: 34px;
+  border-top: 1px solid var(--line);
+  color: var(--paper);
+  font: 600 clamp(1.4rem, 3vw, 2rem)/1.05 var(--display);
+  letter-spacing: .01em;
+  text-transform: uppercase;
+}
+.policy-copy h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.policy-copy p + p, .policy-copy ul + p, .policy-copy ol + p { margin-top: 14px; }
+.policy-copy ul, .policy-copy ol { margin: 10px 0 0 20px; }
+.policy-copy li + li { margin-top: 8px; }
+.policy-copy strong { color: var(--paper); }
+.policy-copy a { text-decoration-color: rgba(255, 107, 43, .55); text-underline-offset: 3px; }
+.policy-copy a:hover { color: var(--orange); }
+
+/* ---------- Footer ---------- */
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding: 28px clamp(20px, 5vw, 72px);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font: 400 9px/1.6 var(--mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.footer-links { display: flex; flex-wrap: wrap; gap: 14px; }
+.footer-links a { color: inherit; text-decoration: none; transition: color .2s ease; }
+.footer-links a:hover { color: var(--paper); }
+footer a { color: inherit; }
+
+/* ---------- Responsive / motion ---------- */
+@media (max-width: 700px) {
+  main { width: min(100% - 32px, 1120px); padding-top: 56px; }
+  footer { flex-direction: column; align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
