@@ -1,60 +1,52 @@
-# Nadi Portfolio
+# Nadi Douglas — Portfolio
 
-A cinematic, scroll-directed portfolio website for Nadi.
+A cinematic, scroll-directed portfolio for a developer and technology consultant focused on accessible web experiences, automation, and practical business tools.
 
-In plain language: this site is built to feel like a guided trip instead of a normal static page. As someone scrolls, the hero, project cards, services, workflow graphics, and contact/signup area move into place like scenes in a short trailer.
+**Live site:** [nadidoug.com](https://nadidoug.com)
+
+## Project overview
+
+Instead of behaving like a conventional static portfolio, the site unfolds as a guided visual sequence. A shared scroll timeline coordinates the hero, project cards, service sections, workflow graphics, and contact experience.
 
 ## Highlights
 
-- One normalized global scroll timeline drives every animation.
-- A 95-frame WebP hero sequence is scrubbed by scroll position.
-- Canvas particles, DOM reveals, chapter timecode, and project cards share the same timeline.
-- Selected Work cards swing into view, lock into place, and expand into detail panels.
-- The signup form connects to Supabase, stores subscribers, queues welcome emails, and sends through Resend.
-- One-click unsubscribe is handled through a Supabase Edge Function.
-- Featured cards can load public README content from GitHub.
-- Responsive layout and reduced-motion support.
+- A normalized global scroll timeline drives the page animation.
+- A 95-frame WebP sequence creates the scroll-scrubbed hero.
+- Canvas particles, DOM reveals, chapter timecode, and project cards share one animation system.
+- Project cards animate into place and expand into detail panels.
+- Supabase stores subscribers and queues welcome emails.
+- A GitHub Actions worker sends email through Resend.
+- A Supabase Edge Function handles one-click unsubscribe.
+- Responsive layout and reduced-motion support are built in.
 
-## How it was made
+## Built with
 
-The site uses plain HTML, CSS, and JavaScript — no front-end framework.
-
-The main idea is a single global scroll value from `0` to `1`. Every visual moment reads from that same timeline:
-
-- the NADI logo shrinking and moving
-- the tagline sliding into place
-- the hero frame sequence
-- the Selected Work cards swinging onto the screen
-- the Tools and Customer Automation sections fading in and out
-- the final contact and signup section
-
-The background is a fixed canvas/video-style layer. The text, cards, workflow nodes, and signup panel sit above it. That keeps the page feeling cinematic while still being simple to host on GitHub Pages.
-
-The email signup is connected to Supabase and Resend:
-
-1. A visitor submits the signup form.
-2. A Supabase Edge Function saves the subscriber.
-3. A queue record is created for the welcome email.
-4. A GitHub Actions worker sends the email through Resend.
-5. The email includes a working unsubscribe link.
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- Canvas API
+- Supabase
+- Resend
+- GitHub Actions
+- GitHub Pages
 
 ## Run locally
 
-Serve this directory with any static server, then open `index.html`.
+No front-end framework or build step is required.
 
-```powershell
+```bash
 python -m http.server 4174 --bind 127.0.0.1
 ```
 
-Then visit `http://127.0.0.1:4174/`.
+Then open [http://127.0.0.1:4174](http://127.0.0.1:4174).
 
-## Featured projects
+## Featured work
 
-- [GuapClock](https://github.com/nadidoug/guapclock)
-- Email Campaign System with Supabase + Resend
-- [Websites Like This](https://github.com/nadidoug/nadi-portfolio)
+- [GuapClock](https://github.com/nadidoug/guapclock) — a Java desktop session timer and billing record tool for recording studios.
+- Email Campaign System — a Supabase and Resend workflow for signup, queued email delivery, and unsubscribe handling.
+- [Retro Glow Pong](https://github.com/nadidoug/retropong) — a mobile-friendly HTML5 Canvas game.
 
-## Repository policies
+## Repository documentation
 
 - [Repository setup](docs/REPO-SETUP.md)
 - [Engineering standards](docs/engineering/README.md)
