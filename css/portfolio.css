@@ -683,3 +683,6 @@ footer {
 .project-preview[hidden] { display: none; }
 .project-preview iframe { width: 100%; height: min(65vh, 600px); border: 1px solid var(--line); background: #fff; }
 .project-preview .button { margin-top: 16px; }
+
+.project-preview iframe[hidden], #projectPreviewConsent[hidden] { display: none; }
+#projectPreviewConsent { padding: 24px; border: 1px solid var(--line); color: var(--muted); line-height: 1.6; }

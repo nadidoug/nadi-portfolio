@@ -171,7 +171,7 @@
         <h2 id="dialogTitle">Project title</h2>
         <p class="dialog-summary" id="dialogSummary"></p>
         <p class="dialog-stack" id="dialogStack"></p>
-        <div class="project-preview" id="projectPreview" hidden><iframe id="projectPreviewFrame" title="Client website preview" loading="lazy" referrerpolicy="no-referrer"></iframe><a class="button" id="projectWebsite" target="_blank" rel="noopener noreferrer">Open website ↗</a></div>
+        <div class="project-preview" id="projectPreview" hidden><div id="projectPreviewConsent"><p>Accept optional cookies to load this external website preview. You can also open the website directly.</p><button class="button" type="button" id="previewCookieSettings">Cookie settings</button></div><iframe hidden id="projectPreviewFrame" title="Client website preview" loading="lazy" referrerpolicy="no-referrer"></iframe><a class="button" id="projectWebsite" target="_blank" rel="noopener noreferrer">Open website ↗</a></div>
         <div class="readme" id="dialogReadme" aria-live="polite"></div>
         <a class="button repo-link" id="dialogRepo" href="https://github.com/" target="_blank" rel="noopener noreferrer" hidden>View repository ↗</a>
       </div>
@@ -201,12 +201,13 @@
   <footer><span>Nadi © 2026</span><span class="footer-links"><a href="legal.html#privacy">Privacy</a><a href="legal.html#terms">Terms</a><a href="legal.html#cookies">Cookies</a><a href="legal.html#accessibility">Accessibility</a></span><span>Built frame by frame</span></footer>
 
   <script src="js/portfolio.js"></script>
+  <div class="cookie-settings"><button type="button" data-cookie-settings>Cookie settings</button></div>
   <aside class="cookie-notice" id="cookieNotice" aria-labelledby="cookieNoticeTitle" hidden>
     <div>
       <h2 id="cookieNoticeTitle">Cookies &amp; browser storage</h2>
-      <p>We use browser storage to remember your preferences. Embedded client websites may set their own cookies. <a href="legal.html#cookies">Read the cookie policy</a>.</p>
+      <p>Essential browser storage keeps the site working and remembers your choice. Optional cookies may be set by embedded client websites, which stay blocked until you accept. <a href="legal.html#cookies">Read the cookie policy</a>.</p>
     </div>
-    <button type="button" id="cookieNoticeDismiss">Got it</button>
+    <div class="cookie-actions"><button type="button" id="cookieAccept">Accept optional cookies</button><button type="button" id="cookieReject">Reject optional cookies</button></div>
   </aside>
   <script src="js/cookie-notice.js" defer></script>
 </body>

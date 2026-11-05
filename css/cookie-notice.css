@@ -8,3 +8,11 @@
 .cookie-notice :focus-visible { outline: 2px solid #ff6b2b; outline-offset: 4px; }
 @media (max-width: 560px) { .cookie-notice { inset: auto 12px max(12px, env(safe-area-inset-bottom)); padding: 16px; gap: 14px; align-items: flex-start; flex-direction: column; } }
 @media print { .cookie-notice { display: none; } }
+
+.cookie-actions { display: flex; flex-wrap: wrap; gap: 10px; flex-shrink: 0; max-width: 230px; }
+.cookie-actions button { width: 100%; }
+.cookie-settings { position: relative; z-index: 10; padding: 12px 24px; text-align: center; background: #08090b; }
+.cookie-settings button { width: auto; margin: 0; padding: 8px; border: 0; background: none; color: #bdbab2; font: 400 12px/1.4 system-ui, sans-serif; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.cookie-settings button:focus-visible { outline: 2px solid #ff6b2b; }
+@media (max-width: 560px) { .cookie-actions { max-width: none; width: 100%; } .cookie-actions button { width: auto; flex: 1; } }
+@media print { .cookie-settings { display: none; } }

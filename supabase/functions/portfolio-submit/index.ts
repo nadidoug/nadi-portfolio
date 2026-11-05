@@ -52,6 +52,31 @@ Deno.serve(async (req: Request) => {
 
   const type = String(body.type || "").trim();
 
+
+  if (type === "cookie-consent") {
+    const origin = req.headers.get("origin") || "";
+    const allowedOrigins = new Set([
+      "https://nadidoug.com", "https://www.nadidoug.com",
+      "https://nadidoug.github.io", "http://127.0.0.1:4174", "http://localhost:4174"
+    ]);
+    if (!allowedOrigins.has(origin)) return json({ error: "Origin not allowed" }, 403);
+    const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    const decidedAt = typeof body.decided_at === "string" ? Date.parse(body.decided_at) : NaN;
+    if (typeof body.id !== "string" || !uuid.test(body.id) ||
+        typeof body.browser_id !== "string" || !uuid.test(body.browser_id) ||
+        !["accepted", "rejected"].includes(String(body.choice)) ||
+        body.policy_version !== "2026-11-05" ||
+        !Number.isFinite(decidedAt) || decidedAt > Date.now() + 300000) {
+      return json({ error: "Invalid consent record" }, 400);
+    }
+    const { error } = await supabase.from("cookie_consents").upsert({
+      id: body.id, browser_id: body.browser_id, choice: body.choice,
+      policy_version: body.policy_version, decided_at: new Date(decidedAt).toISOString()
+    }, { onConflict: "id", ignoreDuplicates: true });
+    if (error) return json({ error: "Could not save cookie preference" }, 500);
+    return json({ success: true });
+  }
+
   if (type === "newsletter") {
     const email = String(body.email || "").trim().toLowerCase();
     const name = body.name ? String(body.name).trim().slice(0, 100) : null;

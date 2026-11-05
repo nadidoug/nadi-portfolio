@@ -60,8 +60,8 @@
     <section class="policy" id="cookies">
       <div><h2>Cookies</h2><span class="effective">Minimal storage</span></div>
       <div class="policy-copy">
-        <p>The site uses browser session storage to remember whether the email signup panel was dismissed. It also remembers when you dismiss the cookie and browser-storage notice. These preferences last only for the current browsing session.</p>
-        <p>The portfolio itself does not currently use advertising cookies, cross-site tracking cookies, or an analytics cookie. Embedded client website previews are provided by third parties and may set their own cookies under their own policies. You can clear or block browser storage in browser settings; doing so may cause the signup panel to appear again.</p>
+        <p>The site uses browser session storage to remember whether the email signup panel was dismissed. That preference lasts for the browsing session. Your optional-cookie choice is saved in local storage until you change it or clear browser data. Use Cookie settings at the bottom of any page to accept or reject optional cookies. We also save new choices in Supabase with a random browser identifier, the choice, policy version, and timestamps. These records are not linked to your newsletter signup. If the connection fails, your latest choice is kept locally and retried on a later visit or when connectivity returns.</p>
+        <p>The portfolio itself does not currently use advertising cookies, cross-site tracking cookies, or an analytics cookie. Embedded client website previews stay blocked until you accept optional cookies. Once loaded, these third parties may set cookies under their own policies. Rejecting optional cookies keeps previews blocked; you can still use the portfolio and open client websites directly. You can clear or block browser storage in browser settings; doing so may cause the signup panel to appear again.</p>
       </div>
     </section>
 
@@ -91,12 +91,13 @@
   </main>
 
   <footer>Nadi © 2026 · Website policies · nadi@nadidoug.com</footer>
+  <div class="cookie-settings"><button type="button" data-cookie-settings>Cookie settings</button></div>
   <aside class="cookie-notice" id="cookieNotice" aria-labelledby="cookieNoticeTitle" hidden>
     <div>
       <h2 id="cookieNoticeTitle">Cookies &amp; browser storage</h2>
-      <p>We use browser storage to remember your preferences. Embedded client websites may set their own cookies. <a href="legal.html#cookies">Read the cookie policy</a>.</p>
+      <p>Essential browser storage keeps the site working and remembers your choice. Optional cookies may be set by embedded client websites, which stay blocked until you accept. <a href="legal.html#cookies">Read the cookie policy</a>.</p>
     </div>
-    <button type="button" id="cookieNoticeDismiss">Got it</button>
+    <div class="cookie-actions"><button type="button" id="cookieAccept">Accept optional cookies</button><button type="button" id="cookieReject">Reject optional cookies</button></div>
   </aside>
   <script src="js/cookie-notice.js" defer></script>
 </body>

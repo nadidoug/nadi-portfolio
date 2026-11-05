@@ -354,7 +354,11 @@ async function openProject(projectKey) {
   preview.hidden = !project.website;
   dialogReadme.hidden = Boolean(project.website);
   if (project.website) {
-    frame.src = project.website;
+    const allowed = window.cookieConsent?.allowsOptional() === true;
+    frame.hidden = !allowed;
+    document.querySelector("#projectPreviewConsent").hidden = allowed;
+    if (allowed) frame.src = project.website;
+    else frame.removeAttribute("src");
     document.querySelector("#projectWebsite").href = project.website;
   } else frame.removeAttribute("src");
   projectDialog.showModal();
@@ -377,6 +381,18 @@ async function openProject(projectKey) {
 }
 
 elements.cards.forEach(card => card.addEventListener("click", () => openProject(card.dataset.project)));
+document.querySelector("#previewCookieSettings").addEventListener("click", () => {
+  projectDialog.close();
+  window.cookieConsent?.open();
+});
+window.addEventListener("cookieconsentchange", () => {
+  if (!window.cookieConsent.allowsOptional()) {
+    const frame = document.querySelector("#projectPreviewFrame");
+    frame.removeAttribute("src");
+    frame.hidden = true;
+    document.querySelector("#projectPreviewConsent").hidden = false;
+  }
+});
 projectDialog.addEventListener("close", () => {
   document.querySelector("#projectPreviewFrame").removeAttribute("src");
 });
