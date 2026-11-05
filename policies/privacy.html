@@ -9,7 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/policy.css">
+  <link rel="stylesheet" href="../css/policy.css">
+  <link rel="stylesheet" href="../css/cookie-notice.css">
 </head>
 <body>
   <a class="skip-link" href="#content">Skip to content</a>
@@ -81,6 +82,14 @@
     <a href="mailto:nadi@nadidoug.com">nadi@nadidoug.com</a>
   </footer>
 
-  <script src="../assets/legal-links.js" defer></script>
+  <script src="../js/legal-links.js" defer></script>
+  <aside class="cookie-notice" id="cookieNotice" aria-labelledby="cookieNoticeTitle" hidden>
+    <div>
+      <h2 id="cookieNoticeTitle">Cookies &amp; browser storage</h2>
+      <p>We use browser storage to remember your preferences. Embedded client websites may set their own cookies. <a href="../legal.html#cookies">Read the cookie policy</a>.</p>
+    </div>
+    <button type="button" id="cookieNoticeDismiss">Got it</button>
+  </aside>
+  <script src="../js/cookie-notice.js" defer></script>
 </body>
 </html>
